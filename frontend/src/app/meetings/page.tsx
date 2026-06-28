@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { Suspense, useState, useEffect } from "react";
 import Link from "next/link";
 import { useSearchParams, useRouter } from "next/navigation";
 import {
@@ -32,7 +32,7 @@ interface Meeting {
   created_at: string;
 }
 
-export default function MeetingsPage() {
+function MeetingsPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [meetings, setMeetings] = useState<Meeting[]>([]);
@@ -605,5 +605,20 @@ export default function MeetingsPage() {
         </div>
       )}
     </div>
+  );
+}
+
+export default function MeetingsPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex h-64 items-center justify-center text-slate-500">
+          <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+          Loading meetings...
+        </div>
+      }
+    >
+      <MeetingsPageContent />
+    </Suspense>
   );
 }

@@ -67,11 +67,11 @@ export default function WelcomeBanner() {
             {/* The Enlarged Video Player */}
             <div className="aspect-video w-full bg-black overflow-hidden rounded-xl shadow-[0_0_40px_rgba(0,0,0,0.6)]">
               <ReactPlayer
-                url={videoUrl}
+                src={videoUrl}
                 width="100%"
                 height="100%"
                 controls={true}
-                playing={false} 
+                playing={false}
               />
             </div>
           </div>

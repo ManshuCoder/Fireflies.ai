@@ -224,10 +224,10 @@ export default function UpgradePage() {
                       <div key={idx} className="flex items-start gap-2.5 text-xs font-semibold text-slate-800">
                         <Check size={14} className="text-slate-300 shrink-0 mt-0.5 stroke-[2]" />
                         <div className="flex flex-col gap-1 flex-1">
-                          <span className={`${feat.underline ? "underline cursor-pointer" : ""}`}>
+                          <span className={`${"underline" in feat && feat.underline ? "underline cursor-pointer" : ""}`}>
                             {feat.text}
                           </span>
-                          {feat.hasStoreIcons && (
+                          {"hasStoreIcons" in feat && feat.hasStoreIcons && (
                             <div className="flex gap-2 items-center mt-1">
                               {/* Apple App Store Logo Mock */}
                               <div className="flex items-center gap-1 rounded bg-black text-white px-2 py-0.5 text-[8px] font-bold">
@@ -239,7 +239,7 @@ export default function UpgradePage() {
                               </div>
                             </div>
                           )}
-                          {feat.isNew && (
+                          {"isNew" in feat && feat.isNew && (
                             <span className="w-fit bg-[#EEFBF7] text-[#10B981] text-[8px] font-extrabold px-1.5 py-0.5 rounded border border-[#A7F3D0]/30 mt-0.5 uppercase tracking-wide">
                               NEW
                             </span>

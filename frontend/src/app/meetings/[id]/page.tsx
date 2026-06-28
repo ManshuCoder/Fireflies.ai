@@ -25,6 +25,7 @@ import {
   Check,
   Edit2,
   Save,
+  X,
 } from "lucide-react";
 
 interface Utterance {
@@ -609,8 +610,9 @@ export default function MeetingDetailPage() {
 
               // Highlight text match helper
               const highlightText = (text: string, search: string) => {
-                if (!search.trim()) return text;
-                const parts = text.split(new RegExp(`(${search})`, "gi"));
+                const safeText = text ?? "";
+                if (!search.trim()) return safeText;
+                const parts = safeText.split(new RegExp(`(${search})`, "gi"));
                 return (
                   <span>
                     {parts.map((part, i) =>
