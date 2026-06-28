@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100%" height="100%">
+  <defs>
+    <linearGradient id="purple-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#9d4edd" />
+      <stop offset="100%" stop-color="#d90429" />
+    </linearGradient>
+    <linearGradient id="pink-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#d90429" />
+      <stop offset="100%" stop-color="#ef233c" />
+    </linearGradient>
+    <linearGradient id="solid-purple" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#9d4edd" />
+      <stop offset="100%" stop-color="#7B2CBF" />
+    </linearGradient>
+    <linearGradient id="solid-pink" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FF2E93" />
+      <stop offset="100%" stop-color="#FF5C9D" />
+    </linearGradient>
+  </defs>
+
+  <!-- Top Left: Rounded Square -->
+  <rect x="15" y="15" width="23" height="23" rx="4" fill="url(#solid-purple)" />
+
+  <!-- Top Right: Rounded Top-Right Corner -->
+  <path d="M 42 15 L 67 15 A 18 18 0 0 1 85 33 L 85 38 L 42 38 Z" fill="url(#solid-pink)" />
+
+  <!-- Bottom Left: Rounded Bottom-Left Corner -->
+  <path d="M 15 42 L 38 42 L 38 85 L 33 85 A 18 18 0 0 1 15 67 Z" fill="url(#purple-grad)" />
+
+  <!-- Bottom Right: Rounded Square -->
+  <rect x="42" y="42" width="23" height="23" rx="4" fill="url(#pink-grad)" />
+</svg>

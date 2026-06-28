@@ -1,0 +1,33 @@
+# Dependencies
+node_modules/
+backend/venv/
+__pycache__/
+*.py[cod]
+
+# Environment & secrets
+.env
+.env.*
+!.env.example
+
+# Build & cache
+frontend/.next/
+frontend/out/
+frontend/build/
+*.tsbuildinfo
+
+# Database & uploads
+*.db
+backend/static/uploads/
+
+# OS & IDE
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Portable tooling
+tools/
