@@ -2,7 +2,7 @@ import os
 import json
 import re
 from datetime import datetime
-from fastapi import FastAPI, Depends, HTTPException, UploadFile, File, Form
+from fastapi import FastAPI, Depends, HTTPException, UploadFile, File, Form, Response
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from sqlalchemy.orm import Session
@@ -226,6 +226,12 @@ def generate_ai_summary(transcript_text: str):
 @app.get("/")
 def health_check():
     return {"status": "ok", "service": "Fireflies.ai Clone API"}
+
+
+@app.head("/")
+def health_check_head():
+    return Response(status_code=200)
+
 
 @app.get("/api/meetings", response_model=List[schemas.MeetingResponse])
 def read_meetings(
