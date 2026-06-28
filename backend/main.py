@@ -223,6 +223,10 @@ def generate_ai_summary(transcript_text: str):
         return default_summary, json.dumps(default_outline), default_actions
 
 # API Endpoints
+@app.get("/")
+def health_check():
+    return {"status": "ok", "service": "Fireflies.ai Clone API"}
+
 @app.get("/api/meetings", response_model=List[schemas.MeetingResponse])
 def read_meetings(
     search: Optional[str] = None,
@@ -386,4 +390,6 @@ def ask_meeting_question(meeting_id: int, request: schemas.ChatRequest, db: Sess
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
+
+    port = int(os.environ.get("PORT", "8000"))
+    uvicorn.run("main:app", host="0.0.0.0", port=port, reload=True)
