@@ -229,7 +229,7 @@ export default function HomePage() {
     <div 
       className="min-h-screen bg-white -m-8 select-none overflow-y-auto scroll-nice flex flex-col"
       style={{
-        backgroundImage: "linear-gradient(to bottom, transparent, #ffffff 240px), linear-gradient(to right, #a5d0ff 0%, #ffffff 50%, #ffc5a0 100%)",
+        backgroundImage: "linear-gradient(to bottom, rgba(255, 255, 255, 0) 80px, #ffffff 260px), linear-gradient(to right, #9ecbff 0%, #ffffff 50%, #ffba94 100%)",
         backgroundSize: "100% 320px, 100% 320px",
         backgroundRepeat: "no-repeat"
       }}

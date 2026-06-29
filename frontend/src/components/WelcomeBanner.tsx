@@ -15,13 +15,13 @@ export default function WelcomeBanner() {
   return (
     <div className="w-full mb-8">
       {/* 1. THE BANNER (Matches the soft light peach color and sizing) */}
-      <div className="bg-[#FFF7F2] rounded-2xl px-10 py-8 flex flex-row items-center justify-between border border-orange-300/80 shadow-sm w-full gap-6">
+      <div className="bg-[#FFF9F6] rounded-3xl px-12 py-5 flex flex-row items-center justify-between border border-[#FFE2D1] shadow-[0_2px_12px_rgba(255,226,209,0.15)] w-full gap-8 h-[166px]">
         
-        <div className="flex-1 text-left space-y-2 flex flex-col items-start">
-          <h2 className="text-xl font-medium text-gray-800 tracking-tight">
+        <div className="flex-1 text-left space-y-1.5 flex flex-col items-start justify-center h-full">
+          <h2 className="text-[19px] font-semibold text-[#4A3E3D] tracking-tight leading-none">
             Welcome Aboard, TAMARAKANDI!
           </h2>
-          <p className="text-gray-500 text-[14px] leading-relaxed max-w-[400px]">
+          <p className="text-[#8B7E7C] text-[13px] leading-relaxed max-w-[360px]">
             Fireflies is now ready to automate your meetings and streamline your workflows.
           </p>
         </div>
@@ -29,7 +29,7 @@ export default function WelcomeBanner() {
         {/* The Video Box inside the banner (Thick Device Screen Border) */}
         <div 
           onClick={() => setIsVideoOpen(true)}
-          className="relative w-[210px] h-[118px] bg-slate-900 rounded-xl cursor-pointer overflow-hidden group shadow-md shrink-0 border-[6px] border-[#FADDBF]"
+          className="relative w-[210px] h-[118px] bg-slate-900 rounded-xl cursor-pointer overflow-hidden group shadow-md shrink-0 border-[6px] border-[#FCD5B5]"
         >
           <img 
             src={thumbnailUrl} 
