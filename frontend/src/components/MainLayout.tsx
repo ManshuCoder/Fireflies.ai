@@ -473,6 +473,20 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
               )}
             </div>
 
+            {/* Record Microphone Button */}
+            <div className="relative group/mic">
+              <button
+                onClick={() => alert("Starting live audio recording...")}
+                className="relative rounded-xl p-2 text-violet-600 hover:bg-violet-50 transition-colors cursor-pointer"
+              >
+                <Mic size={16} />
+              </button>
+              {/* Tooltip */}
+              <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 hidden group-hover/mic:block bg-[#f8fafc] border border-slate-200 px-3 py-1.5 text-[11px] font-semibold text-slate-600 rounded-lg shadow-md whitespace-nowrap z-50">
+                Record audio
+              </div>
+            </div>
+
             {/* Bell Notification Button and Popover */}
             <div className="relative group/bell">
               <button
