@@ -89,6 +89,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const [showInviteCard, setShowInviteCard] = useState(true);
   const [showHelpPanel, setShowHelpPanel] = useState(false);
+  const [showInviteModal, setShowInviteModal] = useState(false);
   const [isHelpVideoOpen, setIsHelpVideoOpen] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [showMoreMenu, setShowMoreMenu] = useState(false);
@@ -342,10 +343,13 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
         }`}>
           {!isCollapsed && (
             <>
-              <div className="flex items-center gap-2 px-2 text-xs font-semibold text-slate-400 hover:text-slate-600 cursor-pointer transition-colors">
+              <Link
+                href="/settings/privacy"
+                className="flex items-center gap-2 px-2 text-xs font-semibold text-slate-400 hover:text-slate-600 transition-colors cursor-pointer block"
+              >
                 <ShieldCheck size={14} />
                 <span>Your Privacy Choices</span>
-              </div>
+              </Link>
 
               {/* Invite coworkers card */}
               {showInviteCard && (
@@ -362,7 +366,8 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
                   </div>
                   <button
                     type="button"
-                    className="w-full flex items-center justify-center gap-1 rounded-md bg-violet-600 py-2 text-[10px] font-bold text-white hover:bg-violet-700 shadow-sm transition-all"
+                    onClick={() => setShowInviteModal(true)}
+                    className="w-full flex items-center justify-center gap-1 rounded-md bg-violet-600 py-2 text-[10px] font-bold text-white hover:bg-violet-700 shadow-sm transition-all cursor-pointer"
                   >
                     <span>+ Create Team</span>
                   </button>
@@ -1110,6 +1115,105 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
               </div>
 
             </form>
+
+          </div>
+        </div>
+      )}
+
+      {/* Invite Teammates Modal Overlay */}
+      {showInviteModal && (
+        <div 
+          onClick={() => setShowInviteModal(false)}
+          className="fixed inset-0 bg-slate-950/40 backdrop-blur-sm flex items-center justify-center p-4 z-[90] animate-in fade-in duration-200"
+        >
+          <div 
+            onClick={(e) => e.stopPropagation()}
+            className="w-full max-w-[480px] rounded-3xl border border-slate-100 bg-[#f8fafc] shadow-2xl animate-in zoom-in-95 duration-200 text-left flex flex-col overflow-hidden font-sans select-none"
+          >
+            {/* Card 1: Main invitation form container */}
+            <div className="bg-white p-5 border-b border-slate-150/70 flex flex-col gap-4">
+              
+              {/* Header */}
+              <div className="flex items-center justify-between">
+                <h3 className="text-sm font-extrabold text-slate-800 tracking-tight">
+                  Invite your teammates
+                </h3>
+                <div className="flex items-center gap-4">
+                  <a 
+                    href="#" 
+                    onClick={(e) => {
+                      e.preventDefault();
+                      navigator.clipboard.writeText("https://fireflies.ai/invite/tamarakandi");
+                      alert("Invite link copied to clipboard!");
+                    }}
+                    className="text-[11px] font-extrabold text-violet-600 hover:text-violet-800 hover:underline flex items-center gap-1 cursor-pointer"
+                  >
+                    <svg className="h-3.5 w-3.5 text-violet-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+                    </svg>
+                    <span>Invite Link</span>
+                  </a>
+                  <button
+                    onClick={() => setShowInviteModal(false)}
+                    className="text-slate-400 hover:text-slate-600 transition-colors p-0.5 rounded cursor-pointer border-0 bg-transparent"
+                  >
+                    <X size={16} />
+                  </button>
+                </div>
+              </div>
+
+              {/* Gift Banner */}
+              <div className="bg-[#EEFDF7] border border-[#A7F3D0]/30 rounded-xl p-3 flex items-center gap-2.5 text-emerald-800">
+                <div className="flex h-6 w-6 items-center justify-center rounded-lg bg-[#D1FAE5] text-emerald-600 shrink-0 shadow-inner">
+                  {/* Gift icon */}
+                  <svg className="h-3.5 w-3.5 fill-emerald-600" viewBox="0 0 24 24">
+                    <path d="M20 6h-2.18c.11-.31.18-.65.18-1 0-1.66-1.34-3-3-3-1.05 0-1.96.54-2.5 1.35l-.5.67-.5-.67C10.96 2.54 10.05 2 9 2 7.34 2 6 3.34 6 5c0 .35.07.69.18 1H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-5-2c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zM9 4c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm11 15H4V8h16v11z"/>
+                  </svg>
+                </div>
+                <span className="text-[11px] font-extrabold leading-normal text-emerald-800/90">
+                  Unlock free meetings for every new teammate that joins
+                </span>
+              </div>
+
+              {/* Email invite input */}
+              <div className="flex gap-2.5 items-center">
+                <input
+                  type="text"
+                  placeholder="Emails separated by comma or tab"
+                  className="flex-1 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-xs font-semibold text-slate-800 placeholder-slate-405 outline-none focus:border-violet-500 focus:ring-2 focus:ring-violet-500/10 transition-all"
+                />
+                <button 
+                  onClick={() => {
+                    alert("Invitation emails sent successfully!");
+                    setShowInviteModal(false);
+                  }}
+                  className="rounded-xl bg-violet-100 hover:bg-violet-200 text-violet-600 px-5 py-2.5 text-xs font-bold transition-all cursor-pointer shrink-0 border-0"
+                >
+                  Send Invite
+                </button>
+              </div>
+
+            </div>
+
+            {/* Card 2: Invite from other workspaces */}
+            <div className="p-4 flex items-center justify-between hover:bg-slate-100/50 transition-colors cursor-pointer group/other-workspaces">
+              <span className="text-xs font-bold text-slate-700">
+                Invite teammates from other workspaces
+              </span>
+              
+              {/* Integration logos */}
+              <div className="flex items-center gap-3">
+                {/* Slack Logo Mini */}
+                <img src="/slack.png" alt="Slack" className="h-4.5 w-4.5 object-contain" />
+                {/* Teams Logo Mini */}
+                <img src="/teams.png" alt="Teams" className="h-4.5 w-4.5 object-contain" />
+                {/* Hubspot Logo Mini */}
+                <img src="/hubspot.png" alt="Hubspot" className="h-4.5 w-4.5 object-contain" />
+                
+                {/* ArrowRight */}
+                <ArrowRight size={14} className="text-slate-400 group-hover/other-workspaces:translate-x-0.5 transition-transform" />
+              </div>
+            </div>
 
           </div>
         </div>
