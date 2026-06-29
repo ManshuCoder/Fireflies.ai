@@ -42,6 +42,8 @@ import {
   Smartphone,
   ArrowRight,
   Laptop,
+  BookOpen,
+  Headset,
 } from "lucide-react";
 
 import MoreMenuTrigger from "./MoreMenuTrigger";
@@ -87,6 +89,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const [showInviteCard, setShowInviteCard] = useState(true);
   const [showHelpPanel, setShowHelpPanel] = useState(false);
+  const [isHelpVideoOpen, setIsHelpVideoOpen] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [showMoreMenu, setShowMoreMenu] = useState(false);
   
@@ -882,62 +885,117 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
         </main>
 
         {/* Floating Help Widget */}
-        <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-3 select-none">
+        <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-3 select-none font-sans">
           {showHelpPanel && (
-            <div className="w-80 rounded-3xl border border-slate-200 bg-white p-4 shadow-2xl ring-1 ring-black/5 animate-in slide-in-from-bottom-5 duration-200 space-y-4 text-left">
+            <div className="w-[300px] rounded-3xl border border-slate-200 bg-white shadow-2xl overflow-hidden animate-in slide-in-from-bottom-5 duration-250 flex flex-col text-left">
               {/* Help Video Card */}
-              <div className="relative group overflow-hidden rounded-2xl border border-slate-100 bg-slate-900 cursor-pointer shadow-md">
-                <div className="absolute inset-0 bg-violet-950/25 z-10 flex items-center justify-center">
-                  <div className="flex h-11 w-11 items-center justify-center rounded-full bg-white text-violet-600 shadow-lg group-hover:scale-105 transition-all">
-                    <Play size={16} className="fill-violet-600 ml-0.5" />
+              <div 
+                onClick={() => setIsHelpVideoOpen(true)}
+                className="p-3.5 bg-[#f8fafc] border-b border-slate-100 flex flex-col gap-2.5 group/help-video cursor-pointer hover:bg-slate-100/50 transition-colors"
+              >
+                {/* Video Preview Image container */}
+                <div className="relative rounded-xl overflow-hidden border border-slate-200 bg-slate-900 aspect-[1.6/1]">
+                  <img 
+                    src="/welcome-thumbnail.png"
+                    alt="Watch Product Overview"
+                    className="w-full h-full object-cover transition-opacity duration-300 group-hover/help-video:opacity-90"
+                  />
+                  {/* Center Play button overlay that lights up on hover */}
+                  <div className="absolute inset-0 flex items-center justify-center z-10 pointer-events-none">
+                    <div className="w-[46px] h-[32px] bg-black/60 rounded-[14px] flex items-center justify-center transition-all duration-300 scale-100 group-hover/help-video:scale-110 group-hover/help-video:bg-[#4c22be] group-hover/help-video:shadow-[0_0_12px_rgba(76,34,190,0.5)]">
+                      <svg className="w-2.5 h-2.5 fill-white ml-0.5" viewBox="0 0 24 24">
+                        <path d="M8 5v14l11-7z" />
+                      </svg>
+                    </div>
                   </div>
                 </div>
-                <div className="h-36 w-full bg-violet-950 flex items-center justify-center text-white font-extrabold text-sm opacity-90">
-                  Fireflies.ai
-                </div>
-                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-3 text-white z-20">
-                  <div className="text-[11px] font-extrabold flex items-center gap-1.5">
-                    <Play size={10} className="fill-white" /> Watch Product Overview (5 min)
+                {/* Title and details */}
+                <div className="space-y-0.5">
+                  <div className="text-[11px] font-extrabold text-slate-800 flex items-center gap-1.5 transition-colors group-hover/help-video:text-[#4c22be]">
+                    <svg className="w-3 h-3 fill-[#4c22be] text-[#4c22be] shrink-0" viewBox="0 0 24 24">
+                      <path d="M8 5v14l11-7z" />
+                    </svg>
+                    <span>Watch Product Overview (5 min)</span>
                   </div>
-                  <div className="text-[9px] text-slate-300 font-bold mt-0.5">Settings, AI Skills, and more.</div>
+                  <div className="text-[9px] text-slate-400 font-bold pl-4.5">
+                    Settings, AI Skills, and more.
+                  </div>
                 </div>
               </div>
 
               {/* Links list */}
-              <div className="space-y-1 font-semibold text-slate-700">
-                <a href="#" className="flex items-center gap-3 rounded-xl px-3 py-2 text-xs hover:bg-slate-50 transition-colors">
-                  <Sparkles size={14} className="text-violet-600" />
+              <div className="p-2 space-y-0.5 font-semibold text-slate-700 bg-white">
+                <a href="#" className="flex items-center gap-3 rounded-xl px-3.5 py-2 text-xs hover:bg-slate-50 hover:text-slate-900 transition-colors">
+                  <Sparkles size={14} className="text-slate-400 shrink-0" />
                   <span>What's new?</span>
                 </a>
-                <a href="#" className="flex items-center gap-3 rounded-xl px-3 py-2 text-xs hover:bg-slate-50 transition-colors">
-                  <FileText size={14} className="text-slate-400" />
+                <a href="#" className="flex items-center gap-3 rounded-xl px-3.5 py-2 text-xs hover:bg-slate-50 hover:text-slate-900 transition-colors">
+                  <BookOpen size={14} className="text-slate-400 shrink-0" />
                   <span>Help Center</span>
                 </a>
-                <a href="#" className="flex items-center gap-3 rounded-xl px-3 py-2 text-xs hover:bg-slate-50 transition-colors">
-                  <Users size={14} className="text-slate-400" />
+                <a href="#" className="flex items-center gap-3 rounded-xl px-3.5 py-2 text-xs hover:bg-slate-50 hover:text-slate-900 transition-colors">
+                  <Users size={14} className="text-slate-400 shrink-0" />
                   <span>Fireflies Community</span>
                 </a>
-                <a href="#" className="flex items-center gap-3 rounded-xl px-3 py-2 text-xs hover:bg-slate-50 transition-colors">
-                  <Send size={14} className="text-slate-400" />
+                <div className="border-b border-slate-100 my-1 mx-3"></div>
+                <a href="#" className="flex items-center gap-3 rounded-xl px-3.5 py-2 text-xs hover:bg-slate-50 hover:text-slate-900 transition-colors">
+                  <Send size={14} className="text-slate-400 shrink-0" />
                   <span>Give Feedback</span>
                 </a>
-                <a href="#" className="flex items-center gap-3 rounded-xl px-3 py-2 text-xs hover:bg-slate-50 transition-colors">
-                  <Mic size={14} className="text-slate-400" />
+                <a href="#" className="flex items-center gap-3 rounded-xl px-3.5 py-2 text-xs hover:bg-slate-50 hover:text-slate-900 transition-colors">
+                  <Headset size={14} className="text-slate-400 shrink-0" />
                   <span>Contact Support</span>
                 </a>
               </div>
             </div>
           )}
 
-          {/* Floating button */}
-          <button
-            type="button"
-            onClick={() => setShowHelpPanel(!showHelpPanel)}
-            className="flex h-12 w-12 items-center justify-center rounded-full bg-violet-950 text-white hover:bg-violet-900 shadow-xl hover:scale-105 active:scale-95 transition-all cursor-pointer"
-          >
-            {showHelpPanel ? <X size={20} /> : <span className="text-lg font-bold">?</span>}
-          </button>
+          {/* Floating trigger button */}
+          <div className="relative group/help-btn">
+            <button
+              type="button"
+              onClick={() => setShowHelpPanel(!showHelpPanel)}
+              className="flex h-12 w-12 items-center justify-center rounded-full bg-[#4c22be] hover:bg-[#3c17a5] text-white shadow-xl hover:scale-105 active:scale-95 transition-all cursor-pointer border border-white/10"
+            >
+              {showHelpPanel ? (
+                <X size={20} className="stroke-[2.5]" />
+              ) : (
+                <div className="h-6 w-6 rounded-full border-[2px] border-white flex items-center justify-center">
+                  <span className="text-[13px] font-bold">?</span>
+                </div>
+              )}
+            </button>
+            {/* Tooltip */}
+            {!showHelpPanel && (
+              <div className="absolute right-full top-1/2 -translate-y-1/2 mr-3 hidden group-hover/help-btn:block bg-[#f8fafc] border border-slate-200 px-3 py-1.5 text-[11px] font-semibold text-slate-600 rounded-lg shadow-md whitespace-nowrap z-50">
+                Help & resources
+              </div>
+            )}
+          </div>
         </div>
+
+        {/* Help Video autoplay modal */}
+        {isHelpVideoOpen && (
+          <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/70 backdrop-blur-sm p-4">
+            <div className="relative w-full max-w-[800px] bg-black rounded-2xl overflow-hidden shadow-[0_0_50px_rgba(0,0,0,0.8)] aspect-video">
+              <button 
+                onClick={() => setIsHelpVideoOpen(false)}
+                className="absolute top-4 right-4 text-white hover:text-gray-300 bg-black/40 hover:bg-black/60 rounded-full p-1.5 transition duration-200 z-50 border border-white/10"
+                aria-label="Close video"
+              >
+                <X size={18} />
+              </button>
+              <iframe
+                src="https://www.youtube.com/embed/uZuFXgNfZmI?autoplay=1"
+                title="Help Video"
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowFullScreen
+                className="w-full h-full"
+              ></iframe>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Add to Live Meeting Modal (Capture popup) */}
