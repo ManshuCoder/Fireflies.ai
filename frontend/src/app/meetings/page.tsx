@@ -199,14 +199,11 @@ function MeetingsPageContent() {
   };
 
   return (
-    <div className="flex h-[calc(100vh-140px)] gap-5 select-none overflow-hidden text-slate-800">
+    <div className="flex h-[calc(100vh-52px)] select-none overflow-hidden text-slate-800 bg-white -m-8">
       {/* 1. Left Sidebar: Channels List */}
-      <div className="w-56 bg-white border border-slate-200 rounded-3xl p-4.5 flex flex-col gap-5 shrink-0 overflow-y-auto shadow-sm">
-        {/* Title */}
-        <div className="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider">Meetings</div>
-
+      <div className="w-56 bg-white border-r border-gray-200 p-4.5 flex flex-col gap-5 shrink-0 overflow-y-auto h-full">
         {/* Search channels input */}
-        <div className="relative">
+        <div className="relative mt-2">
           <Search className="absolute top-1/2 left-3 h-3.5 w-3.5 -translate-y-1/2 text-slate-400" />
           <input
             type="text"
@@ -231,40 +228,34 @@ function MeetingsPageContent() {
         {/* Channels Section */}
         <div className="space-y-4 pt-4 border-t border-slate-100 flex-1 flex flex-col justify-between">
           <div className="space-y-3">
-            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">All channels</span>
-            <div className="text-center p-3 rounded-2xl border border-dashed border-slate-200 space-y-2.5">
-              <span className="text-sm font-extrabold text-violet-300">#</span>
-              <p className="text-[9px] font-bold leading-normal text-slate-400">
-                Create channels to organize your conversations
-              </p>
-              <button className="mx-auto flex items-center justify-center gap-1 rounded-lg border border-slate-200 py-1.5 px-3 text-[9px] font-extrabold text-slate-600 hover:bg-slate-50 transition-all cursor-pointer">
-                <span>+ Channel</span>
-              </button>
-            </div>
+            <button className="flex items-center gap-1.5 rounded-lg border border-gray-200 py-1.5 px-3 text-xs font-semibold text-slate-650 hover:bg-slate-50 transition-all cursor-pointer">
+              <Plus size={14} />
+              <span>Channel</span>
+            </button>
           </div>
         </div>
       </div>
 
       {/* 2. Middle Panel: Meetings Feed */}
-      <div className="flex-1 bg-white border border-slate-200 rounded-3xl p-5 shadow-sm flex flex-col gap-5 overflow-hidden min-w-[320px]">
+      <div className="flex-1 bg-white p-5 flex flex-col gap-5 overflow-hidden min-w-[320px] h-full">
         {/* Filters Top Bar */}
-        <div className="flex items-center justify-between border-b border-slate-50 pb-3 shrink-0">
-          <div className="flex gap-2">
-            <button className="rounded-xl border border-slate-200 bg-slate-100 px-4 py-2 text-xs font-bold text-slate-800 shadow-sm">
+        <div className="flex items-center justify-between border-b border-slate-100 pb-3 shrink-0">
+          <div className="flex gap-6">
+            <button className="text-xs font-bold text-slate-800 hover:text-slate-900 cursor-pointer">
               Hosted by me
             </button>
-            <button className="rounded-xl border border-transparent px-4 py-2 text-xs font-bold text-slate-400 hover:text-slate-700">
+            <button className="text-xs font-semibold text-slate-400 hover:text-slate-750 cursor-pointer">
               Shared with me
             </button>
           </div>
 
           <div className="flex items-center gap-2">
-            <button className="flex items-center gap-1.5 rounded-xl border border-slate-200 py-2 px-3 text-xs font-bold text-slate-600 hover:bg-slate-50 transition-all">
+            <button className="flex items-center gap-1.5 rounded-lg border border-gray-200 bg-white py-2 px-3 text-xs font-semibold text-slate-605 hover:bg-slate-50 transition-all cursor-pointer">
               <span>Filters</span>
             </button>
             <button
               onClick={() => setShowModal(true)}
-              className="rounded-xl border border-slate-200 p-2 text-slate-400 hover:bg-slate-50"
+              className="rounded-lg border border-gray-200 bg-white p-2 text-slate-400 hover:bg-slate-50 cursor-pointer"
               title="Upload Transcript"
             >
               <Search size={14} />
@@ -378,10 +369,10 @@ function MeetingsPageContent() {
       </div>
 
       {/* 3. Right Sidebar Panel: Mini Ask Fred (Screenshot 1) */}
-      <div className="w-80 bg-white border border-slate-200 rounded-3xl p-4.5 flex flex-col justify-between shadow-sm shrink-0 overflow-y-auto space-y-6">
+      <div className="w-80 bg-white border-l border-gray-200 p-4.5 flex flex-col justify-between shrink-0 overflow-y-auto space-y-6 h-full">
         <div className="space-y-5">
           {/* Ask Fred Header */}
-          <div className="flex items-center justify-between border-b border-slate-50 pb-3">
+          <div className="flex items-center justify-between border-b border-slate-100 pb-3">
             <div className="flex items-center gap-2">
               <img src="/fred.png" alt="Fred" className="h-[18px] w-[18px] object-contain" />
               <span className="text-xs font-bold text-slate-800">Ask Fred</span>
@@ -390,50 +381,45 @@ function MeetingsPageContent() {
 
           {/* Connect Slack Card */}
           {showSlackCard && (
-            <div className="rounded-2xl bg-violet-50/50 border border-violet-100 p-4 relative space-y-3 animate-in fade-in slide-in-from-top-2 duration-200">
+            <div className="rounded-xl bg-purple-50 border border-purple-100/50 px-3.5 py-2.5 relative flex items-center justify-between gap-4 animate-in fade-in slide-in-from-top-2 duration-200 pr-8">
               <button
                 onClick={() => setShowSlackCard(false)}
-                className="absolute top-2.5 right-2.5 text-slate-400 hover:text-slate-600 transition-colors"
+                className="absolute top-1/2 -translate-y-1/2 right-2 text-slate-400 hover:text-slate-650 transition-colors cursor-pointer"
               >
                 <X size={12} />
               </button>
-              <div className="flex items-center gap-2">
-                <div className="flex gap-0.5 items-center justify-center shrink-0">
-                  <span className="text-sm font-bold text-violet-700">💬</span>
-                  <span className="text-sm font-bold text-red-500">✉️</span>
-                </div>
-                <div className="text-[10px] font-extrabold text-slate-800 leading-tight">
-                  Connect Slack and Gmail <span className="text-slate-400 font-normal">— get answers with full context.</span>
-                </div>
+              <div className="text-[10.5px] font-bold text-slate-700 leading-normal flex-1">
+                <span>Connect Slack and Gmail <span className="text-slate-400 font-medium">— get answers with full context.</span></span>
               </div>
-              <button className="w-full flex items-center justify-center rounded-xl bg-violet-600 py-2 text-[10px] font-bold text-white hover:bg-violet-700 shadow-sm transition-all">
-                <span>Connect</span>
+              <button className="text-[10.5px] font-extrabold text-violet-600 hover:text-violet-850 shrink-0 cursor-pointer">
+                Connect
               </button>
             </div>
           )}
 
           {/* Greeting Box */}
           <div className="space-y-4">
-            <div className="flex gap-2 items-center text-xs font-bold text-slate-400">
-              <Sparkles size={14} className="text-teal-400 fill-teal-400 animate-pulse" />
-              <span>Hi TAMARAKANDI! Get ready for your meeting</span>
+            <div className="flex gap-2.5 items-start">
+              <Sparkles size={14} className="text-teal-400 fill-teal-400 animate-pulse mt-0.5" />
+              <div className="flex flex-col">
+                <span className="text-xs font-bold text-slate-800">Hi TAMARAKANDI!</span>
+                <span className="text-[11px] font-medium text-gray-500 mt-0.5">Get ready for your meeting</span>
+              </div>
             </div>
 
             {/* Action pill rows */}
-            <div className="space-y-2.5">
+            <div className="flex flex-wrap gap-2.5">
               {[
-                { text: "My action items", emoji: "✓", bg: "bg-emerald-50 text-emerald-600 border-emerald-100" },
-                { text: "Key decisions", emoji: "🎯", bg: "bg-pink-50 text-pink-600 border-pink-100" },
-                { text: "Key initiatives", emoji: "📍", bg: "bg-purple-50 text-purple-600 border-purple-100" },
+                { text: "My action items", emoji: "✓" },
+                { text: "Key decisions", emoji: "🎯" },
+                { text: "Key initiatives", emoji: "📍" },
               ].map((pill, idx) => (
                 <button
                   key={idx}
                   onClick={() => router.push("/askfred")}
-                  className="w-full flex items-center gap-3 rounded-xl border border-slate-100 bg-slate-50/25 p-3 hover:border-violet-200 hover:bg-violet-50/20 cursor-pointer transition-all duration-200 text-xs font-bold text-slate-700"
+                  className="inline-flex items-center gap-1.5 rounded-full w-fit px-4 py-2 bg-gray-50 hover:bg-gray-100/80 border border-transparent hover:border-gray-200 cursor-pointer transition-all text-xs font-semibold text-slate-650"
                 >
-                  <span className={`rounded-md px-1.5 py-0.5 text-[10px] font-bold border ${pill.bg}`}>
-                    {pill.emoji}
-                  </span>
+                  <span className="text-[11px]">{pill.emoji}</span>
                   <span>{pill.text}</span>
                 </button>
               ))}
@@ -447,10 +433,10 @@ function MeetingsPageContent() {
             e.preventDefault();
             router.push("/askfred");
           }}
-          className="rounded-2xl border border-slate-200 bg-white p-3 shadow-md focus-within:border-violet-500 focus-within:ring-1 focus-within:ring-violet-500 transition-all flex flex-col gap-3"
+          className="rounded-lg border border-slate-200 bg-white p-3 focus-within:border-violet-500 focus-within:ring-1 focus-within:ring-violet-500 transition-all flex flex-col gap-2.5 shadow-sm"
         >
           <div className="flex">
-            <span className="rounded-lg bg-slate-100 px-2 py-0.5 text-[9px] font-extrabold text-slate-500">
+            <span className="rounded bg-slate-100 px-2 py-0.5 text-[9px] font-extrabold text-slate-500">
               # My Meetings
             </span>
           </div>
@@ -458,10 +444,10 @@ function MeetingsPageContent() {
           <textarea
             rows={2}
             placeholder="Ask anything. Type / to run AI skills."
-            className="w-full text-xs font-semibold text-slate-800 placeholder-slate-400 outline-none resize-none"
+            className="w-full text-xs font-semibold text-slate-800 placeholder-slate-400 outline-none resize-none pt-1"
           />
 
-          <div className="flex justify-between items-center border-t border-slate-50 pt-2">
+          <div className="flex justify-between items-center border-t border-slate-100 pt-2.5">
             {/* Globe icon left */}
             <div className="relative">
               <span className="text-sm">🌐</span>
@@ -471,7 +457,7 @@ function MeetingsPageContent() {
             {/* Send arrow button right */}
             <button
               type="submit"
-              className="flex h-7 w-7 items-center justify-center rounded-full bg-violet-100 text-violet-700 hover:bg-violet-200 transition-all cursor-pointer"
+              className="flex h-7 w-7 items-center justify-center rounded-md bg-violet-100 text-violet-700 hover:bg-violet-200 transition-all cursor-pointer border-0"
             >
               <ArrowRight size={14} className="text-violet-600 font-bold" />
             </button>
