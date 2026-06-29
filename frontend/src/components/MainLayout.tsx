@@ -39,6 +39,9 @@ import {
   Edit3,
   Link2,
   Calendar,
+  Smartphone,
+  ArrowRight,
+  Laptop,
 } from "lucide-react";
 
 import MoreMenuTrigger from "./MoreMenuTrigger";
@@ -55,6 +58,24 @@ const IntegrationsIcon = (props: any) => (
   >
     <path d="m12 4-10 5 10 5 10-5-10-5Z" />
     <path d="m2 14 10 5 10-5" />
+  </svg>
+);
+
+const ChromeIcon = (props: any) => (
+  <svg
+    {...props}
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <circle cx="12" cy="12" r="10" />
+    <circle cx="12" cy="12" r="4" />
+    <line x1="21.17" y1="8" x2="12" y2="8" />
+    <line x1="3.95" y1="6.06" x2="8.54" y2="14" />
+    <line x1="10.88" y1="21.94" x2="15.46" y2="14" />
   </svg>
 );
 
@@ -80,6 +101,19 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
   const [showCaptureModal, setShowCaptureModal] = useState(false);
   const [isMoreDropdownOpen, setIsMoreDropdownOpen] = useState(false);
   const [meetingLink, setMeetingLink] = useState("");
+
+  // Click outside to close the profile menu
+  useEffect(() => {
+    const handleOutsideClick = () => {
+      setShowProfileMenu(false);
+    };
+    if (showProfileMenu) {
+      window.addEventListener("click", handleOutsideClick);
+    }
+    return () => {
+      window.removeEventListener("click", handleOutsideClick);
+    };
+  }, [showProfileMenu]);
 
   // Click outside to close the Capture dropdown
   useEffect(() => {
@@ -376,10 +410,8 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
               className="rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-2 text-xs font-bold text-emerald-700 hover:bg-[#E6FDF4] hover:text-emerald-800 transition-all duration-200 block text-center cursor-pointer"
             >
               Upgrade
-            </Link>
-
-            {/* Split Capture Button */}
-            <div className="flex items-center rounded-md bg-violet-600 text-white shadow-md shadow-violet-200 overflow-visible relative">
+            </Link>             {/* Split Capture Button */}
+            <div className="flex items-center rounded-md bg-violet-600 hover:bg-violet-700 text-white shadow-md shadow-violet-200 overflow-visible relative transition-all duration-200">
               {/* Left Capture Button */}
               <div className="relative group/capture">
                 <button 
@@ -390,7 +422,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
                     window.history.pushState({}, "", url.toString());
                     window.dispatchEvent(new Event("popstate"));
                   }}
-                  className="flex items-center gap-1.5 px-3.5 py-2 text-xs font-bold text-white hover:bg-violet-700 rounded-l-md transition-all duration-200 cursor-pointer"
+                  className="flex items-center gap-1.5 px-3.5 py-2 text-xs font-bold text-white transition-all duration-200 cursor-pointer bg-transparent border-0 rounded-l-md"
                 >
                   <Video size={14} />
                   <span>Capture</span>
@@ -401,8 +433,8 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
                 </div>
               </div>
 
-              {/* Vertical line separator */}
-              <div className="w-[1px] h-4 bg-white/25 shrink-0"></div>
+              {/* Vertical line separator (Invisible line separator) */}
+              <div className="w-[1px] h-4 bg-transparent shrink-0"></div>
 
               {/* Right Arrow Button */}
               <div className="relative group/more">
@@ -411,7 +443,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
                     e.stopPropagation();
                     setIsMoreDropdownOpen(!isMoreDropdownOpen);
                   }}
-                  className="flex items-center justify-center px-2 py-2 text-xs font-bold text-white hover:bg-violet-700 rounded-r-md transition-all duration-200 cursor-pointer h-full"
+                  className="flex items-center justify-center px-2 py-2 text-xs font-bold text-white transition-all duration-200 cursor-pointer h-full bg-transparent border-0 rounded-r-md"
                 >
                   <ChevronDown size={12} />
                 </button>
@@ -689,8 +721,153 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
             </div>
 
             {/* Mini Avatar */}
-            <div className="h-8 w-8 rounded-full bg-pink-600 text-white font-bold text-xs flex items-center justify-center cursor-pointer shadow">
-              T
+            <div className="relative">
+              <div 
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setShowProfileMenu(!showProfileMenu);
+                }}
+                className="h-8 w-8 rounded-full bg-[#c01557] hover:bg-[#a00f45] text-white font-bold text-xs flex items-center justify-center cursor-pointer shadow transition-all select-none"
+              >
+                T
+              </div>
+
+              {/* Profile dropdown popover (matching the user image) */}
+              {showProfileMenu && (
+                <div 
+                  onClick={(e) => e.stopPropagation()}
+                  className="absolute right-0 mt-3 w-[660px] rounded-3xl border border-slate-200 bg-[#f8fafc] p-5 shadow-[0_15px_45px_rgba(0,0,0,0.12)] z-50 animate-in fade-in slide-in-from-top-3 duration-250 flex gap-4 text-left font-sans"
+                >
+                  {/* Left Column */}
+                  <div className="flex-1 flex flex-col gap-4">
+                    {/* Card 1: Mobile App */}
+                    <div className="bg-white rounded-2xl p-5 border border-slate-100 flex flex-col gap-3.5 items-start">
+                      <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-pink-50 text-pink-500 shadow-inner shrink-0">
+                        <Smartphone size={20} />
+                      </div>
+                      <div className="space-y-1">
+                        <h4 className="text-[13px] font-bold text-slate-800">Mobile App</h4>
+                        <p className="text-xs text-slate-500 font-medium leading-relaxed">
+                          Transcribe and summarize in-person conversations with mobile app.
+                        </p>
+                      </div>
+                      
+                      {/* Badges */}
+                      <div className="flex gap-2.5">
+                        <a 
+                          href="https://apps.apple.com/us/app/fireflies-ai-notetaker/id6463164203"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex h-8 w-8 items-center justify-center rounded-lg bg-white p-2 border border-slate-200 hover:scale-105 hover:bg-slate-50 transition-all cursor-pointer shadow-sm"
+                        >
+                          <img
+                            src="/app_store_logo.png"
+                            alt="App Store"
+                            className="h-4.5 w-4.5 object-contain"
+                          />
+                        </a>
+                        <a 
+                          href="https://play.google.com/store/apps/details?id=ai.fireflies.mobile&pcampaignid=web_share"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex h-8 w-8 items-center justify-center rounded-lg bg-white p-2 border border-slate-200 hover:scale-105 hover:bg-slate-50 transition-all cursor-pointer shadow-sm"
+                        >
+                          <img
+                            src="/play_store_logo.png"
+                            alt="Google Play"
+                            className="h-4.5 w-4.5 object-contain"
+                          />
+                        </a>
+                      </div>
+                    </div>
+
+                    {/* Card 2: Chrome Extension */}
+                    <div className="bg-white rounded-2xl p-5 border border-slate-100 flex flex-col gap-3.5 items-start">
+                      <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-blue-50 text-blue-500 shadow-inner shrink-0">
+                        <ChromeIcon size={20} />
+                      </div>
+                      <div className="space-y-1">
+                        <h4 className="text-[13px] font-bold text-slate-800">Chrome Extension</h4>
+                        <p className="text-xs text-slate-500 font-medium leading-relaxed">
+                          Record and transcribe Google Meet calls without Fireflies notetaker bot.
+                        </p>
+                      </div>
+                      <a 
+                        href="https://chromewebstore.google.com/detail/firefliesai-meeting-recor/lbeghdecmhlncigaljkolnciamafgkpe"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="rounded-xl border border-slate-200 bg-white hover:bg-slate-50 px-4.5 py-2 text-xs font-bold text-slate-700 hover:border-slate-350 transition-all cursor-pointer shadow-sm"
+                      >
+                        Install
+                      </a>
+                    </div>
+
+                    {/* Card 3: Download Desktop App (black/gradient banner) */}
+                    <a
+                      href="https://fireflies.ai/desktop"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-full rounded-2xl bg-gradient-to-r from-slate-900 via-slate-950 to-slate-900 p-4 flex items-center justify-between text-white hover:opacity-95 transition-all cursor-pointer shadow-md group/desktop-banner"
+                    >
+                      <div className="text-[12px] font-semibold flex items-center gap-2.5">
+                        <Laptop size={16} className="text-slate-300" />
+                        <span>Download Fireflies Desktop App</span>
+                      </div>
+                      <ArrowRight size={14} className="text-white group-hover/desktop-banner:translate-x-1 transition-transform" />
+                    </a>
+                  </div>
+
+                  {/* Right Column */}
+                  <div className="w-[250px] bg-white rounded-2xl border border-slate-100 flex flex-col overflow-hidden shadow-sm">
+                    {/* Header */}
+                    <div className="p-4 border-b border-slate-100 text-left bg-slate-50/50">
+                      <h4 className="text-[13px] font-bold text-slate-850">Hi TAMARAKANDI</h4>
+                      <span className="text-[10px] text-slate-400 font-medium truncate mt-0.5 block" title="tamarakandi.2201206cs@iiitbh.ac.in">
+                        tamarakandi.2201206cs@iiitbh.ac.in
+                      </span>
+                    </div>
+
+                    {/* Free Info */}
+                    <div className="p-4 border-b border-slate-100 text-left">
+                      <h5 className="text-xs font-bold text-slate-800">Free</h5>
+                      <span className="text-[10px] text-slate-400 font-medium mt-0.5 block">
+                        Unlimited meetings
+                      </span>
+                    </div>
+
+                    {/* Storage Info */}
+                    <div className="p-4 border-b border-slate-100 text-left space-y-1.5">
+                      <h5 className="text-xs font-bold text-slate-800">Storage</h5>
+                      <div className="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                        <div className="w-[0.5%] h-full bg-emerald-500 rounded-full"></div>
+                      </div>
+                      <span className="text-[10px] text-slate-400 font-semibold block">
+                        0 / 400 mins
+                      </span>
+                    </div>
+
+                    {/* Menu links list */}
+                    <div className="p-1.5 flex flex-col gap-0.5 bg-white">
+                      {[
+                        { name: "Refer and Earn $5", href: "/upgrade" },
+                        { name: "Settings", href: "/settings" },
+                        { name: "Manage Devices", href: "/settings?tab=devices" },
+                        { name: "Platform rules", href: "/skills" },
+                        { name: "Logout", href: "/" }
+                      ].map((menuItem) => (
+                        <Link
+                          key={menuItem.name}
+                          href={menuItem.href}
+                          onClick={() => setShowProfileMenu(false)}
+                          className="w-full text-left text-xs font-semibold text-slate-750 rounded-xl px-3.5 py-2.5 hover:bg-slate-50 hover:text-slate-900 transition-colors cursor-pointer block"
+                        >
+                          {menuItem.name}
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </header>
