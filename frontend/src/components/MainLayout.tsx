@@ -783,8 +783,12 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
 
                     {/* Card 2: Chrome Extension */}
                     <div className="bg-white rounded-2xl p-5 border border-slate-100 flex flex-col gap-3.5 items-start">
-                      <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-blue-50 text-blue-500 shadow-inner shrink-0">
-                        <ChromeIcon size={20} />
+                      <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-blue-50 p-1.5 shadow-inner shrink-0">
+                        <img
+                          src="/chrome_logo.png"
+                          alt="Chrome logo"
+                          className="h-full w-full object-contain"
+                        />
                       </div>
                       <div className="space-y-1">
                         <h4 className="text-[13px] font-bold text-slate-800">Chrome Extension</h4>
@@ -793,10 +797,10 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
                         </p>
                       </div>
                       <a 
-                        href="https://chromewebstore.google.com/detail/firefliesai-meeting-recor/lbeghdecmhlncigaljkolnciamafgkpe"
+                        href="https://chromewebstore.google.com/detail/fireflies-ai-meeting-note/meimoidfecamngeoanhnpdjjdcefoldn?pli=1"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="rounded-xl border border-slate-200 bg-white hover:bg-slate-50 px-4.5 py-2 text-xs font-bold text-slate-700 hover:border-slate-350 transition-all cursor-pointer shadow-sm"
+                        className="rounded-xl border border-slate-200 bg-white hover:bg-violet-50/50 hover:text-violet-700 hover:border-violet-300 hover:shadow-md transition-all duration-200 px-4.5 py-2 text-xs font-bold text-slate-700 cursor-pointer shadow-sm"
                       >
                         Install
                       </a>
