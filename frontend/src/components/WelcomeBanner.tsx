@@ -30,6 +30,14 @@ export default function WelcomeBanner() {
             alt="Fireflies Product Demo"
             className="w-full h-full object-cover transition-opacity duration-300 group-hover:opacity-95"
           />
+          {/* Overlay Play Button that scales and lights up on hover */}
+          <div className="absolute inset-0 flex items-center justify-center z-10 pointer-events-none">
+            <div className="w-[52px] h-[36px] bg-[#673dfb] rounded-[18px] flex items-center justify-center shadow-lg transition-all duration-300 scale-100 group-hover:scale-110 group-hover:bg-[#7c5dfa] group-hover:shadow-[0_0_15px_rgba(124,93,250,0.5)]">
+              <svg className="w-3.5 h-3.5 fill-white ml-0.5" viewBox="0 0 24 24">
+                <path d="M8 5v14l11-7z" />
+              </svg>
+            </div>
+          </div>
         </div>
       </div>
 
