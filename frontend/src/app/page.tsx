@@ -235,10 +235,8 @@ export default function HomePage() {
       }}
     >
       {/* 1. Welcome Banner Header card Container */}
-      <div className="w-full pt-20 px-8 shrink-0">
-        <div className="max-w-[860px] mx-auto w-full">
-          <WelcomeBanner />
-        </div>
+      <div className="max-w-[860px] mx-auto w-full px-8 pt-20 shrink-0">
+        <WelcomeBanner />
       </div>
 
       {/* Centered Content Column (White Background) */}

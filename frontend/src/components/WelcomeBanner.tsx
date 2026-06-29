@@ -9,9 +9,9 @@ export default function WelcomeBanner() {
   return (
     <div className="w-full mb-8 select-none">
       {/* 1. THE BANNER */}
-      <div className="bg-[#FFF9F6] rounded-3xl px-12 py-5 flex flex-row items-center justify-between border border-[#FFE2D1] shadow-[0_2px_12px_rgba(255,226,209,0.15)] w-full gap-8 h-[166px]">
+      <div className="bg-[#FFF9F6] rounded-3xl px-12 py-12 grid grid-cols-2 items-center border border-[#FFE2D1] shadow-[0_2px_12px_rgba(255,226,209,0.15)] w-full gap-8">
         
-        <div className="flex-1 text-left space-y-1.5 flex flex-col items-start justify-center h-full">
+        <div className="text-left space-y-1.5 flex flex-col items-start justify-center">
           <h2 className="text-[19px] font-semibold text-[#4A3E3D] tracking-tight leading-none">
             Welcome Aboard, TAMARAKANDI!
           </h2>
@@ -23,7 +23,7 @@ export default function WelcomeBanner() {
         {/* The Video Mockup Card */}
         <div 
           onClick={() => setIsVideoOpen(true)}
-          className="relative w-[210px] h-[118px] cursor-pointer overflow-hidden group shrink-0 rounded-xl shadow-sm transition-all duration-300 hover:scale-[1.02]"
+          className="relative w-full aspect-video cursor-pointer overflow-hidden group rounded-xl shadow-sm transition-all duration-300 hover:scale-[1.02]"
         >
           <img 
             src="/welcome-thumbnail.png"
