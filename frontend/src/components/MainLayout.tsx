@@ -38,6 +38,7 @@ import {
   Check,
   Edit3,
   Link2,
+  Calendar,
 } from "lucide-react";
 
 import MoreMenuTrigger from "./MoreMenuTrigger";
@@ -77,6 +78,21 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
 
   // Capture Modal State
   const [showCaptureModal, setShowCaptureModal] = useState(false);
+  const [isMoreDropdownOpen, setIsMoreDropdownOpen] = useState(false);
+  const [meetingLink, setMeetingLink] = useState("");
+
+  // Click outside to close the Capture dropdown
+  useEffect(() => {
+    const handleOutsideClick = () => {
+      setIsMoreDropdownOpen(false);
+    };
+    if (isMoreDropdownOpen) {
+      window.addEventListener("click", handleOutsideClick);
+    }
+    return () => {
+      window.removeEventListener("click", handleOutsideClick);
+    };
+  }, [isMoreDropdownOpen]);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -125,7 +141,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
     { name: "Meetings", href: "/meetings", icon: Video },
     { name: "Meeting Status", href: "/status", icon: Activity },
     { name: "Uploads", href: "/upload", icon: Upload },
-    { name: "Integrations", href: "/integrations", icon: Layers },
+    { name: "Integrations", href: "/integrations", icon: IntegrationsIcon },
     { name: "Analytics", href: "/analytics", icon: BarChart2 },
     { name: "Voice Agents", href: "/agents", icon: Bot, badge: "NEW" },
     { name: "AI Skills", href: "/skills", icon: Sparkles },
@@ -317,49 +333,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
             </>
           )}
 
-          <div className="relative group/tooltip">
-            <div
-              className={`flex items-center justify-between rounded-xl cursor-pointer transition-all duration-200 ${
-                isCollapsed ? "p-1.5 justify-center" : "p-2 hover:bg-slate-50"
-              }`}
-              onClick={() => setShowProfileMenu(!showProfileMenu)}
-            >
-              <div className="flex items-center gap-3">
-                <div className="flex h-9 w-9 items-center justify-center rounded-full bg-pink-600 text-white font-bold text-sm shadow-inner shrink-0">
-                  T
-                </div>
-                {!isCollapsed && (
-                  <div className="text-left">
-                    <div className="text-sm font-bold text-slate-800 leading-tight">TAMARAKANDI</div>
-                    <div className="text-[11px] text-slate-400 font-medium truncate w-32">user@fireflies.clone</div>
-                  </div>
-                )}
-              </div>
-              {!isCollapsed && <ChevronDown size={16} className="text-slate-400" />}
-            </div>
 
-            {isCollapsed && (
-              <div className="absolute left-full top-1/2 -translate-y-1/2 ml-3 hidden group-hover/tooltip:block bg-slate-950 text-white text-[10px] font-extrabold py-1.5 px-2.5 rounded-lg whitespace-nowrap z-50 shadow-lg ring-1 ring-black/5">
-                Profile Settings
-              </div>
-            )}
-
-            {showProfileMenu && (
-              <div className={`absolute bottom-full left-0 mb-2 w-full rounded-2xl border border-slate-200 bg-white p-2 shadow-xl ring-1 ring-black/5 z-50 animate-in fade-in slide-in-from-bottom-2 duration-200 ${
-                isCollapsed ? "min-w-[150px]" : ""
-              }`}>
-                <div className="px-3 py-2 text-xs font-medium text-slate-400 border-b border-slate-100">
-                  Account Settings
-                </div>
-                <button className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-sm text-slate-700 hover:bg-slate-50">
-                  Profile & Billing
-                </button>
-                <button className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-sm text-slate-700 hover:bg-slate-50">
-                  Logout
-                </button>
-              </div>
-            )}
-          </div>
         </div>
       </aside>
       )}
@@ -380,15 +354,20 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
             <input
               type="text"
               placeholder="Search by title or keyword    (Ctrl + K)"
-              className="w-full rounded-xl border border-slate-200 bg-slate-50/50 py-2 pl-10 pr-4 text-xs font-semibold text-slate-800 placeholder-slate-400 outline-none transition-all focus:border-violet-500 focus:bg-white focus:ring-1 focus:ring-violet-500"
+              className="w-full rounded-xl border border-slate-200 bg-slate-50/50 hover:bg-slate-100 hover:border-slate-300 py-2 pl-10 pr-4 text-xs font-semibold text-slate-800 placeholder-slate-400 outline-none transition-all focus:border-violet-500 focus:bg-white focus:ring-1 focus:ring-violet-500 cursor-pointer"
             />
           </div>
 
           {/* User Controls */}
           <div className="flex items-center gap-4.5">
-            <span className="hidden text-xs font-bold text-slate-400 lg:inline-block">
-              Unlimited Meetings
-            </span>
+            <div className="relative group/unlimited">
+              <span className="hidden text-xs font-bold text-slate-400 lg:inline-block cursor-pointer hover:text-slate-600 transition-colors">
+                Unlimited Meetings
+              </span>
+              <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 hidden group-hover/unlimited:block bg-[#f8fafc] border border-slate-200 px-3 py-1.5 text-[11px] font-semibold text-slate-600 rounded-lg shadow-md whitespace-nowrap z-50">
+                Unlimited transcription & summary
+              </div>
+            </div>
 
             {/* Upgrade Button */}
             <Link
@@ -398,18 +377,104 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
               Upgrade
             </Link>
 
-            {/* Capture Button */}
-            <button 
-              onClick={() => setShowCaptureModal(true)}
-              className="flex items-center gap-2 rounded-md bg-violet-600 px-4 py-2 text-xs font-bold text-white hover:bg-violet-700 shadow-md shadow-violet-200 transition-all duration-200 cursor-pointer"
-            >
-              <Video size={14} />
-              <span>Capture</span>
-              <ChevronDown size={12} />
-            </button>
+            {/* Split Capture Button */}
+            <div className="flex items-center rounded-md bg-violet-600 text-white shadow-md shadow-violet-200 overflow-visible relative">
+              {/* Left Capture Button */}
+              <div className="relative group/capture">
+                <button 
+                  onClick={() => {
+                    setShowCaptureModal(true);
+                    const url = new URL(window.location.href);
+                    url.searchParams.set("capture", "true");
+                    window.history.pushState({}, "", url.toString());
+                    window.dispatchEvent(new Event("popstate"));
+                  }}
+                  className="flex items-center gap-1.5 px-3.5 py-2 text-xs font-bold text-white hover:bg-violet-700 rounded-l-md transition-all duration-200 cursor-pointer"
+                >
+                  <Video size={14} />
+                  <span>Capture</span>
+                </button>
+                {/* Tooltip */}
+                <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2.5 hidden group-hover/capture:block bg-[#f8fafc] border border-slate-200 px-3 py-1.5 text-[11px] font-semibold text-slate-600 rounded-lg shadow-md whitespace-nowrap z-50">
+                  Capture live meeting
+                </div>
+              </div>
+
+              {/* Vertical line separator */}
+              <div className="w-[1px] h-4 bg-white/25 shrink-0"></div>
+
+              {/* Right Arrow Button */}
+              <div className="relative group/more">
+                <button 
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setIsMoreDropdownOpen(!isMoreDropdownOpen);
+                  }}
+                  className="flex items-center justify-center px-2 py-2 text-xs font-bold text-white hover:bg-violet-700 rounded-r-md transition-all duration-200 cursor-pointer h-full"
+                >
+                  <ChevronDown size={12} />
+                </button>
+                {/* Tooltip */}
+                {!isMoreDropdownOpen && (
+                  <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2.5 hidden group-hover/more:block bg-[#f8fafc] border border-slate-200 px-3 py-1.5 text-[11px] font-semibold text-slate-600 rounded-lg shadow-md whitespace-nowrap z-50">
+                    More
+                  </div>
+                )}
+              </div>
+
+              {/* Dropdown menu (from 3rd image) */}
+              {isMoreDropdownOpen && (
+                <div className="absolute top-full right-0 mt-2 w-56 rounded-2xl border border-slate-200 bg-white p-2 shadow-xl ring-1 ring-black/5 z-50 text-left animate-in fade-in slide-in-from-top-2 duration-200">
+                  <button
+                    onClick={() => {
+                      setIsMoreDropdownOpen(false);
+                      setShowCaptureModal(true);
+                      const url = new URL(window.location.href);
+                      url.searchParams.set("capture", "true");
+                      window.history.pushState({}, "", url.toString());
+                      window.dispatchEvent(new Event("popstate"));
+                    }}
+                    className="flex w-full items-center gap-3 rounded-xl px-3 py-2 text-left text-xs font-semibold text-slate-700 hover:bg-slate-50 hover:text-slate-900 transition-colors cursor-pointer border-0"
+                  >
+                    <Video size={14} className="text-slate-400" />
+                    <span>Add to live meeting</span>
+                  </button>
+                  <button
+                    onClick={() => {
+                      setIsMoreDropdownOpen(false);
+                      window.location.href = "/?schedule=true";
+                    }}
+                    className="flex w-full items-center gap-3 rounded-xl px-3 py-2 text-left text-xs font-semibold text-slate-700 hover:bg-slate-50 hover:text-slate-900 transition-colors cursor-pointer border-0"
+                  >
+                    <Calendar size={14} className="text-slate-400" />
+                    <span>Schedule new meeting</span>
+                  </button>
+                  <button
+                    onClick={() => {
+                      setIsMoreDropdownOpen(false);
+                      window.location.href = "/upload";
+                    }}
+                    className="flex w-full items-center gap-3 rounded-xl px-3 py-2 text-left text-xs font-semibold text-slate-700 hover:bg-slate-50 hover:text-slate-900 transition-colors cursor-pointer border-0"
+                  >
+                    <Upload size={14} className="text-slate-400" />
+                    <span>Upload audio or video</span>
+                  </button>
+                  <button
+                    onClick={() => {
+                      setIsMoreDropdownOpen(false);
+                      alert("Starting live audio recording...");
+                    }}
+                    className="flex w-full items-center gap-3 rounded-xl px-3 py-2 text-left text-xs font-semibold text-slate-700 hover:bg-slate-50 hover:text-slate-900 transition-colors cursor-pointer border-0"
+                  >
+                    <Mic size={14} className="text-slate-400" />
+                    <span>Start recording</span>
+                  </button>
+                </div>
+              )}
+            </div>
 
             {/* Bell Notification Button and Popover */}
-            <div className="relative">
+            <div className="relative group/bell">
               <button
                 onClick={() => setIsNotificationOpen(!isNotificationOpen)}
                 className="relative rounded-xl p-2 text-slate-400 hover:bg-slate-100 hover:text-slate-600 transition-colors cursor-pointer"
@@ -417,6 +482,12 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
                 <Bell size={16} />
                 <span className="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-violet-600 animate-pulse"></span>
               </button>
+              {/* Tooltip */}
+              {!isNotificationOpen && (
+                <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 hidden group-hover/bell:block bg-[#f8fafc] border border-slate-200 px-3 py-1.5 text-[11px] font-semibold text-slate-600 rounded-lg shadow-md whitespace-nowrap z-50">
+                  Notification
+                </div>
+              )}
 
               {/* Notification Popover */}
               {isNotificationOpen && (
@@ -710,23 +781,23 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
             >
               {/* Name your meeting */}
               <div className="space-y-1">
-                <label className="text-[11px] font-bold text-slate-450 uppercase tracking-wider block">
-                  Name your meeting <span className="text-slate-400 font-semibold">(Optional)</span>
+                <label className="text-[13px] font-medium text-slate-700 block">
+                  Name your meeting <span className="text-slate-400 font-normal">(Optional)</span>
                 </label>
                 <input
                   type="text"
                   placeholder="E.g. Product team sync"
-                  className="w-full rounded-xl border border-slate-200 px-4 py-2.5 text-xs font-semibold text-slate-800 outline-none focus:border-violet-500 bg-white"
+                  className="w-full rounded-xl border border-slate-200 px-4 py-2.5 text-xs font-semibold text-slate-800 outline-none focus:border-violet-500 bg-white mt-1.5"
                 />
               </div>
 
               {/* Meeting link */}
               <div className="space-y-1">
-                <label className="text-[11px] font-bold text-slate-450 uppercase tracking-wider block">
+                <label className="text-[13px] font-medium text-slate-700 block">
                   Meeting link
                 </label>
-                <span className="text-[10px] font-semibold text-slate-400 block mt-0.5">
-                  Capture meetings from Google Meet, Zoom, MS Teams, and more.
+                <span className="text-[11px] text-slate-400 block mt-0.5">
+                  Capture meetings from GMeet, Zoom, MS teams, and <a href="#" className="underline text-slate-400 hover:text-slate-600">more</a>.
                 </span>
                 
                 {/* Input with Link Symbol */}
@@ -735,8 +806,9 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
                   <input
                     type="text"
                     required
-                    placeholder="https://teams.microsoft.com/l/meetup-join/..."
-                    defaultValue="https://teams.microsoft.com/l/meetup-join/"
+                    placeholder="https://zoom.us/s/77277195107"
+                    value={meetingLink}
+                    onChange={(e) => setMeetingLink(e.target.value)}
                     className="w-full text-xs font-semibold text-slate-800 outline-none bg-white"
                   />
                 </div>
@@ -744,12 +816,12 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
 
               {/* Meeting language */}
               <div className="space-y-1">
-                <label className="text-[11px] font-bold text-slate-450 uppercase tracking-wider block">
+                <label className="text-[13px] font-medium text-slate-700 block">
                   Meeting language
                 </label>
                 
                 {/* Custom dropdown select */}
-                <div className="flex items-center justify-between rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-xs font-semibold text-slate-800 cursor-pointer hover:bg-slate-50 transition-colors mt-1.5">
+                <div className="flex items-center justify-between rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-xs text-slate-800 cursor-pointer hover:bg-slate-50 transition-colors mt-1.5">
                   <span>English (Global)</span>
                   <ChevronDown size={14} className="text-slate-400" />
                 </div>
@@ -761,17 +833,23 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
                   type="button"
                   onClick={() => {
                     setShowCaptureModal(false);
+                    setMeetingLink("");
                     const url = new URL(window.location.href);
                     url.searchParams.delete("capture");
                     window.history.pushState({}, "", url.toString());
                   }}
-                  className="rounded-xl px-4 py-2 text-xs font-extrabold text-slate-500 hover:text-slate-700 hover:bg-slate-50 cursor-pointer"
+                  className="rounded-xl border border-slate-200 bg-white hover:bg-slate-50 px-4.5 py-2.5 text-xs font-bold text-slate-500 cursor-pointer"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="rounded-xl bg-[#5f25e6] hover:bg-[#4f12b3] px-5 py-2.5 text-xs font-bold text-white shadow-md shadow-violet-200 transition-all cursor-pointer"
+                  disabled={!meetingLink.trim()}
+                  className={`rounded-xl px-5 py-2.5 text-xs font-bold transition-all ${
+                    meetingLink.trim() 
+                      ? "bg-violet-600 hover:bg-violet-700 text-white cursor-pointer shadow-md shadow-violet-200" 
+                      : "bg-[#ECE9FF] text-[#BEB6FF] cursor-not-allowed"
+                  }`}
                 >
                   Start Capturing
                 </button>

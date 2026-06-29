@@ -112,6 +112,49 @@ export default function HomePage() {
     fetchMeetings();
   }, []);
 
+  // Sync URL query params with homepage modals
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const handleUrlChange = () => {
+        const params = new URLSearchParams(window.location.search);
+        if (params.get("schedule") === "true") {
+          setShowScheduleModal(true);
+        } else {
+          setShowScheduleModal(false);
+        }
+
+        if (params.get("upload") === "true") {
+          setShowModal(true);
+        } else {
+          setShowModal(false);
+        }
+      };
+
+      handleUrlChange();
+      window.addEventListener("popstate", handleUrlChange);
+      return () => window.removeEventListener("popstate", handleUrlChange);
+    }
+  }, []);
+
+  // Clean up URL parameters when modals are closed
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const url = new URL(window.location.href);
+      let changed = false;
+      if (!showModal && url.searchParams.has("upload")) {
+        url.searchParams.delete("upload");
+        changed = true;
+      }
+      if (!showScheduleModal && url.searchParams.has("schedule")) {
+        url.searchParams.delete("schedule");
+        changed = true;
+      }
+      if (changed) {
+        window.history.pushState({}, "", url.toString());
+      }
+    }
+  }, [showModal, showScheduleModal]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!titleInput || !participantsInput) {
@@ -183,9 +226,16 @@ export default function HomePage() {
   };
 
   return (
-    <div className="min-h-screen bg-white -m-8 select-none overflow-y-auto scroll-nice flex flex-col bg-gradient-to-b from-blue-50 via-orange-50/30 to-white bg-[length:100%_400px] bg-no-repeat">
+    <div 
+      className="min-h-screen bg-white -m-8 select-none overflow-y-auto scroll-nice flex flex-col"
+      style={{
+        backgroundImage: "linear-gradient(to bottom, transparent, #ffffff 240px), linear-gradient(to right, #a5d0ff 0%, #ffffff 50%, #ffc5a0 100%)",
+        backgroundSize: "100% 320px, 100% 320px",
+        backgroundRepeat: "no-repeat"
+      }}
+    >
       {/* 1. Welcome Banner Header card Container */}
-      <div className="w-full pt-12 px-8 shrink-0">
+      <div className="w-full pt-20 px-8 shrink-0">
         <div className="max-w-[860px] mx-auto w-full">
           <WelcomeBanner />
         </div>
@@ -205,44 +255,62 @@ export default function HomePage() {
         {/* 3 columns grid */}
         <div className="grid grid-cols-3 gap-4">
           {/* Schedule card */}
-          <div 
-            onClick={() => setShowScheduleModal(true)}
-            className="group flex items-center justify-between rounded-xl border-0 bg-pink-50/70 py-4 px-5 cursor-pointer hover:bg-pink-100/50 hover:shadow-sm transition-all duration-200"
-          >
-            <div className="flex items-center gap-4">
-              <Calendar size={20} className="text-[#FF2E93] shrink-0" />
-              <span className="text-[14px] font-medium text-gray-700">Schedule Meeting</span>
+          <div className="relative group/qs-card">
+            <div 
+              onClick={() => setShowScheduleModal(true)}
+              className="group flex items-center justify-between rounded-xl border-0 bg-pink-50/70 py-4 px-5 cursor-pointer hover:bg-pink-100/50 hover:shadow-sm transition-all duration-200"
+            >
+              <div className="flex items-center gap-4">
+                <Calendar size={20} className="text-[#FF2E93] shrink-0" />
+                <span className="text-[14px] font-medium text-gray-700">Schedule Meeting</span>
+              </div>
+              <ChevronRight size={15} className="text-slate-400 group-hover:text-[#FF2E93] transition-colors" />
             </div>
-            <ChevronRight size={15} className="text-slate-400 group-hover:text-[#FF2E93] transition-colors" />
+            {/* Tooltip */}
+            <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2.5 hidden group-hover/qs-card:block bg-[#f8fafc] border border-slate-200 px-3 py-1.5 text-[11px] font-semibold text-slate-600 rounded-lg shadow-md whitespace-nowrap z-50">
+              Schedule new meeting
+            </div>
           </div>
 
           {/* Upload card */}
-          <div
-            onClick={() => setShowModal(true)}
-            className="group flex items-center justify-between rounded-xl border-0 bg-emerald-50/70 py-4 px-5 cursor-pointer hover:bg-emerald-100/50 hover:shadow-sm transition-all duration-200"
-          >
-            <div className="flex items-center gap-4">
-              <Upload size={20} className="text-[#059669] shrink-0" />
-              <span className="text-[14px] font-medium text-gray-700">Upload File</span>
+          <div className="relative group/qs-card">
+            <Link
+              href="/upload"
+              className="group flex items-center justify-between rounded-xl border-0 bg-emerald-50/70 py-4 px-5 cursor-pointer hover:bg-emerald-100/50 hover:shadow-sm transition-all duration-200"
+            >
+              <div className="flex items-center gap-4">
+                <Upload size={20} className="text-[#059669] shrink-0" />
+                <span className="text-[14px] font-medium text-gray-700">Upload File</span>
+              </div>
+              <ChevronRight size={15} className="text-slate-400 group-hover:text-[#059669] transition-colors" />
+            </Link>
+            {/* Tooltip */}
+            <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2.5 hidden group-hover/qs-card:block bg-[#f8fafc] border border-slate-200 px-3 py-1.5 text-[11px] font-semibold text-slate-600 rounded-lg shadow-md whitespace-nowrap z-50">
+              Upload File
             </div>
-            <ChevronRight size={15} className="text-slate-400 group-hover:text-[#059669] transition-colors" />
           </div>
 
           {/* Capture card */}
-          <div 
-            onClick={() => {
-              const url = new URL(window.location.href);
-              url.searchParams.set("capture", "true");
-              window.history.pushState({}, "", url.toString());
-              window.dispatchEvent(new Event("popstate"));
-            }}
-            className="group flex items-center justify-between rounded-xl border-0 bg-purple-50/70 py-4 px-5 cursor-pointer hover:bg-purple-100/50 hover:shadow-sm transition-all duration-200"
-          >
-            <div className="flex items-center gap-4">
-              <Plus size={20} className="text-[#7C3AED] shrink-0" />
-              <span className="text-[14px] font-medium text-gray-700">Capture Meeting</span>
+          <div className="relative group/qs-card">
+            <div 
+              onClick={() => {
+                const url = new URL(window.location.href);
+                url.searchParams.set("capture", "true");
+                window.history.pushState({}, "", url.toString());
+                window.dispatchEvent(new Event("popstate"));
+              }}
+              className="group flex items-center justify-between rounded-xl border-0 bg-purple-50/70 py-4 px-5 cursor-pointer hover:bg-purple-100/50 hover:shadow-sm transition-all duration-200"
+            >
+              <div className="flex items-center gap-4">
+                <Plus size={20} className="text-[#7C3AED] shrink-0" />
+                <span className="text-[14px] font-medium text-gray-700">Capture Meeting</span>
+              </div>
+              <ChevronRight size={15} className="text-slate-400 group-hover:text-[#7C3AED] transition-colors" />
             </div>
-            <ChevronRight size={15} className="text-slate-400 group-hover:text-[#7C3AED] transition-colors" />
+            {/* Tooltip */}
+            <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2.5 hidden group-hover/qs-card:block bg-[#f8fafc] border border-slate-200 px-3 py-1.5 text-[11px] font-semibold text-slate-600 rounded-lg shadow-md whitespace-nowrap z-50">
+              Capture Meeting
+            </div>
           </div>
         </div>
       </div>
@@ -271,13 +339,18 @@ export default function HomePage() {
             })}
           </div>
 
-          <button 
-            onClick={() => setShowSettingsModal(true)}
-            className="flex items-center gap-1.5 text-xs font-bold text-slate-400 hover:text-slate-600 transition-colors cursor-pointer"
-          >
-            <CalendarCogIcon className="h-[18px] w-[18px] text-slate-450 shrink-0" />
-            <span>Settings</span>
-          </button>
+          <div className="relative group/settings">
+            <button 
+              onClick={() => setShowSettingsModal(true)}
+              className="flex items-center gap-1.5 text-xs font-bold text-slate-400 hover:text-slate-600 transition-colors cursor-pointer"
+            >
+              <CalendarCogIcon className="h-[18px] w-[18px] text-slate-450 shrink-0" />
+              <span>Settings</span>
+            </button>
+            <div className="absolute bottom-full right-0 mb-2 hidden group-hover/settings:block bg-[#f8fafc] border border-slate-200 px-3 py-1.5 text-[11px] font-semibold text-slate-600 rounded-lg shadow-md whitespace-nowrap z-50">
+              Calendar Settings
+            </div>
+          </div>
         </div>
 
         {/* Logs list container */}

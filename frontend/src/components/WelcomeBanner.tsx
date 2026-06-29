@@ -15,7 +15,7 @@ export default function WelcomeBanner() {
   return (
     <div className="w-full mb-8">
       {/* 1. THE BANNER (Matches the soft light peach color and sizing) */}
-      <div className="bg-[#FFF7F2] rounded-2xl px-10 py-8 flex flex-row items-center justify-between border border-[#FFE6D3] shadow-sm w-full gap-6">
+      <div className="bg-[#FFF7F2] rounded-2xl px-10 py-8 flex flex-row items-center justify-between border border-orange-300/80 shadow-sm w-full gap-6">
         
         <div className="flex-1 text-left space-y-2 flex flex-col items-start">
           <h2 className="text-xl font-medium text-gray-800 tracking-tight">
