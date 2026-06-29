@@ -148,6 +148,12 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
       setActiveTab("AskFred");
     } else if (pathname.startsWith("/analytics")) {
       setActiveTab("Analytics");
+    } else if (pathname.startsWith("/soundbites")) {
+      setActiveTab("Soundbites");
+    } else if (pathname.startsWith("/playlist")) {
+      setActiveTab("Playlist");
+    } else if (pathname.startsWith("/topics-tracker")) {
+      setActiveTab("Topics Tracker");
     } else if (pathname.startsWith("/settings")) {
       setActiveTab("Settings");
     } else if (pathname.startsWith("/status")) {
@@ -374,7 +380,17 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
         <header className="flex h-[52px] items-center justify-between border-b-[0.5px] border-slate-200 bg-white px-3 shrink-0">
           {/* Section Title */}
           <div className="flex items-center gap-4">
-            <h1 className="text-sm font-bold text-slate-900">{activeTab}</h1>
+            {activeTab === "Soundbites" ? (
+              <div className="flex items-center gap-1.5 text-xs font-semibold text-slate-500">
+                <Link href="/" className="hover:text-slate-805 flex items-center gap-1 text-slate-500 no-underline font-medium">
+                  <span>←</span> <span>Home</span>
+                </Link>
+                <span className="text-slate-300">/</span>
+                <span className="text-slate-800 font-bold">Soundbites</span>
+              </div>
+            ) : (
+              <h1 className="text-sm font-bold text-slate-900">{activeTab}</h1>
+            )}
           </div>
 
           {/* Search bar */}

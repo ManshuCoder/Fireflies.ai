@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
+import Link from "next/link";
 import { MoreHorizontal } from "lucide-react";
 
 // 1. Custom SVG Icon Components (Strictly match requirements)
@@ -95,24 +96,22 @@ export default function MoreMenuTrigger({ isCollapsed }: MoreMenuTriggerProps) {
       {isOpen && (
         <div className="absolute left-full ml-2 top-0 z-50 bg-white rounded-lg shadow-[0_4px_20px_rgba(0,0,0,0.08)] border border-gray-100 py-2 w-[180px] animate-in fade-in slide-in-from-left-2 duration-150">
           {[
-            { label: "Soundbites", icon: SoundbitesIcon },
-            { label: "Playlist", icon: PlaylistIcon },
-            { label: "Topics Tracker", icon: TopicsTrackerIcon },
-            { label: "Contacts", icon: ContactsIcon },
+            { label: "Soundbites", icon: SoundbitesIcon, href: "/soundbites" },
+            { label: "Playlist", icon: PlaylistIcon, href: "/playlist" },
+            { label: "Topics Tracker", icon: TopicsTrackerIcon, href: "/topics-tracker" },
+            { label: "Contacts", icon: ContactsIcon, href: "#" },
           ].map((item) => {
             const Icon = item.icon;
             return (
-              <div
+              <Link
                 key={item.label}
-                onClick={() => {
-                  alert(`${item.label} selected!`);
-                  setIsOpen(false);
-                }}
-                className="flex items-center gap-3 px-4 py-2 hover:bg-gray-50 cursor-pointer transition-colors text-[15px] font-normal text-[#475569]"
+                href={item.href}
+                onClick={() => setIsOpen(false)}
+                className="flex items-center gap-3 px-4 py-2 hover:bg-gray-50 cursor-pointer transition-colors text-[15px] font-normal text-[#475569] no-underline"
               >
                 <Icon />
                 <span>{item.label}</span>
-              </div>
+              </Link>
             );
           })}
         </div>
