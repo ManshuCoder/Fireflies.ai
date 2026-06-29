@@ -79,19 +79,95 @@ export default function AskFredPage() {
     { text: "Prepare weekly digest, based on my meetings", icon: Calendar },
   ];
 
+  const renderChatInput = () => {
+    return (
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleSendChat(chatInput);
+        }}
+        className="w-full max-w-3xl mx-auto rounded-2xl border border-violet-200 bg-white focus-within:border-violet-500 focus-within:ring-1 focus-within:ring-violet-500 transition-all flex flex-col overflow-hidden shadow-sm"
+      >
+        <textarea
+          rows={3}
+          placeholder="Ask anything across your meetings, channels, and people"
+          value={chatInput}
+          onChange={(e) => setChatInput(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && !e.shiftKey) {
+              e.preventDefault();
+              handleSendChat(chatInput);
+            }
+          }}
+          className="w-full text-xs font-semibold text-slate-800 placeholder-slate-400 outline-none resize-none p-4 pb-12 pt-4 align-top"
+        />
+        
+        <div className="flex justify-between items-center border-t border-slate-100 px-4 py-3 text-[10px] text-slate-400 font-bold bg-slate-50/50">
+          {/* Connector icon left */}
+          <button
+            type="button"
+            className="rounded-lg p-1.5 hover:bg-slate-100 text-slate-400 hover:text-slate-600 transition-colors cursor-pointer"
+            title="Connectors"
+          >
+            <Grid size={15} />
+          </button>
+
+          {/* Model select & Send button right */}
+          <div className="flex items-center gap-3">
+            <select className="rounded-xl border border-slate-200 bg-white py-1.5 px-3 outline-none text-[10px] font-extrabold text-slate-500 cursor-pointer">
+              <option>Sonnet 4.6 (Auto)</option>
+              <option>Gemini 1.5 Flash</option>
+              <option>GPT-4o Mini</option>
+            </select>
+
+            <button
+              type="submit"
+              disabled={loading}
+              className="flex h-7 w-7 items-center justify-center rounded-full bg-violet-600 text-white hover:bg-violet-700 shadow shadow-violet-200 transition-all cursor-pointer disabled:opacity-50"
+            >
+              <ArrowUp size={14} className="text-white font-bold" />
+            </button>
+          </div>
+        </div>
+      </form>
+    );
+  };
+
+  const renderSuggestionsList = () => {
+    return (
+      <div className="w-full max-w-3xl mx-auto mt-6 flex flex-col items-start text-left space-y-4 pl-4">
+        {suggestions.map((sug, idx) => {
+          const Icon = sug.icon;
+          return (
+            <div
+              key={idx}
+              onClick={() => handleSendChat(sug.text)}
+              className="flex items-center gap-3 cursor-pointer group text-xs font-semibold text-slate-500 hover:text-violet-600 transition-colors"
+            >
+              <Icon size={16} className="text-slate-400 group-hover:text-violet-500 transition-colors shrink-0" />
+              <span>{sug.text}</span>
+            </div>
+          );
+        })}
+      </div>
+    );
+  };
+
   return (
     <div className="flex h-[calc(100vh-140px)] gap-6 overflow-hidden select-none">
       {/* Left Sidebar Chat List Panel */}
-      <div className="w-64 bg-white border border-slate-200 rounded-3xl p-4.5 flex flex-col justify-between shadow-sm shrink-0">
+      <div className="w-64 bg-transparent p-4.5 flex flex-col justify-between shrink-0">
         <div className="space-y-5 flex-1 flex flex-col overflow-hidden">
           {/* New Chat Button */}
-          <button
-            onClick={() => setMessages([])}
-            className="w-full flex items-center justify-center gap-2 rounded-xl bg-violet-600 py-2.5 text-xs font-bold text-white shadow-sm hover:bg-violet-700 transition-all cursor-pointer"
-          >
-            <Plus size={15} />
-            <span>New Chat</span>
-          </button>
+          <div className="pb-1">
+            <button
+              onClick={() => setMessages([])}
+              className="flex items-center gap-2 px-1 text-xs font-bold text-slate-600 hover:text-slate-900 transition-colors cursor-pointer"
+            >
+              <Plus size={15} className="text-slate-400" />
+              <span>New Chat</span>
+            </button>
+          </div>
 
           {/* Search bar */}
           <div className="relative">
@@ -99,11 +175,11 @@ export default function AskFredPage() {
             <input
               type="text"
               placeholder="Search"
-              className="w-full rounded-xl border border-slate-200 bg-slate-50/50 py-2 pl-9 pr-3 text-xs font-semibold text-slate-800 outline-none focus:bg-white focus:border-violet-500"
+              className="w-full rounded-xl border border-slate-200 bg-white py-2 pl-9 pr-3 text-xs font-semibold text-slate-800 outline-none focus:border-violet-500"
             />
           </div>
 
-          <button className="flex items-center gap-2 px-1 text-xs font-bold text-slate-600 hover:text-slate-900 transition-colors">
+          <button className="flex items-center gap-2 px-1 text-xs font-bold text-slate-600 hover:text-slate-900 transition-colors cursor-pointer">
             <Grid size={15} className="text-slate-400" />
             <span>Connectors</span>
           </button>
@@ -121,42 +197,36 @@ export default function AskFredPage() {
       </div>
 
       {/* Main Chat Workspace */}
-      <div className="flex-1 bg-white border border-slate-200 rounded-3xl p-6 shadow-sm flex flex-col justify-between overflow-hidden">
-        {/* Messages view or Greeting view */}
-        <div className="flex-1 overflow-y-auto pr-2 space-y-6 flex flex-col justify-center">
-          {messages.length === 0 ? (
-            <div className="text-center space-y-8 max-w-lg mx-auto">
-              <h2 className="text-lg md:text-xl font-bold text-slate-800 tracking-tight">
-                Hi TAMARAKANDI, how can I help today?
-              </h2>
+      <div className="flex-1 bg-transparent p-6 flex flex-col overflow-hidden">
+        {messages.length === 0 ? (
+          <div className="flex-1 flex flex-col justify-center max-w-3xl mx-auto w-full">
+            {/* 1. The Greeting */}
+            <h2 className="text-lg md:text-xl font-bold text-slate-800 tracking-tight text-center mb-6">
+              Hi TAMARAKANDI, how can I help today?
+            </h2>
 
-              {/* Chat Suggestions Grid */}
-              <div className="space-y-3.5 text-left">
-                {suggestions.map((sug, idx) => {
-                  const Icon = sug.icon;
-                  return (
-                    <div
-                      key={idx}
-                      onClick={() => handleSendChat(sug.text)}
-                      className="flex items-center gap-3.5 rounded-2xl border border-slate-100 bg-slate-50/25 p-3.5 hover:border-violet-200 hover:bg-violet-50/20 cursor-pointer transition-all duration-200 text-xs font-bold text-slate-700"
-                    >
-                      <Icon size={16} className="text-slate-400" />
-                      <span>{sug.text}</span>
-                    </div>
-                  );
-                })}
-              </div>
+            {/* 2. The Chat Input Box */}
+            <div className="w-full">
+              {renderChatInput()}
             </div>
-          ) : (
-            <div className="space-y-5 flex-1 flex flex-col justify-end pb-4">
-              <div className="overflow-y-auto space-y-4 max-h-full pr-1">
+
+            {/* 3. The Suggestions List */}
+            <div className="w-full">
+              {renderSuggestionsList()}
+            </div>
+          </div>
+        ) : (
+          <div className="flex-1 flex flex-col justify-between overflow-hidden">
+            {/* Messages view */}
+            <div className="flex-1 overflow-y-auto pr-2 space-y-5 pb-4">
+              <div className="space-y-4">
                 {messages.map((msg, idx) => (
                   <div key={idx} className="flex gap-4 items-start animate-in fade-in duration-200">
                     {msg.sender === "fred" ? (
                       <img
                         src="/fred.png"
                         alt="Fred"
-                        className="h-8 w-8 object-contain bg-slate-50 p-1.5 rounded-xl border border-slate-100"
+                        className="h-8 w-8 object-contain bg-white p-1.5 rounded-xl border border-slate-100"
                       />
                     ) : (
                       <div className="h-8 w-8 rounded-full bg-pink-600 text-white font-extrabold text-xs flex items-center justify-center shrink-0 shadow">
@@ -182,65 +252,16 @@ export default function AskFredPage() {
                 )}
               </div>
             </div>
-          )}
-        </div>
 
-        {/* Input box */}
-        <div className="border-t border-slate-100 pt-4 space-y-2 shrink-0">
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              handleSendChat(chatInput);
-            }}
-            className="rounded-2xl border border-slate-200 bg-white p-3 shadow-md focus-within:border-violet-500 focus-within:ring-1 focus-within:ring-violet-500 transition-all flex flex-col gap-3"
-          >
-            <textarea
-              rows={2}
-              placeholder="Ask anything across your meetings, channels, and people"
-              value={chatInput}
-              onChange={(e) => setChatInput(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter" && !e.shiftKey) {
-                  e.preventDefault();
-                  handleSendChat(chatInput);
-                }
-              }}
-              className="w-full text-xs font-semibold text-slate-800 placeholder-slate-400 outline-none resize-none"
-            />
-            
-            <div className="flex justify-between items-center border-t border-slate-50 pt-2 text-[10px] text-slate-400 font-bold">
-              {/* Connector icon left */}
-              <button
-                type="button"
-                className="rounded-lg p-1.5 hover:bg-slate-50 text-slate-400 hover:text-slate-600 transition-colors"
-                title="Connectors"
-              >
-                <Grid size={15} />
-              </button>
-
-              {/* Model select & Send button right */}
-              <div className="flex items-center gap-3">
-                <select className="rounded-xl border border-slate-200 bg-slate-50/50 py-1.5 px-3 outline-none text-[10px] font-extrabold text-slate-500 cursor-pointer">
-                  <option>Sonnet 4.6 (Auto)</option>
-                  <option>Gemini 1.5 Flash</option>
-                  <option>GPT-4o Mini</option>
-                </select>
-
-                <button
-                  type="submit"
-                  disabled={loading}
-                  className="flex h-7 w-7 items-center justify-center rounded-full bg-violet-600 text-white hover:bg-violet-700 shadow shadow-violet-200 transition-all cursor-pointer disabled:opacity-50"
-                >
-                  <ArrowUp size={14} className="text-white font-bold" />
-                </button>
+            {/* Input box at bottom of active chat thread */}
+            <div className="pt-4 space-y-2 shrink-0 border-t border-slate-100">
+              {renderChatInput()}
+              <div className="text-center text-[10px] font-bold text-slate-400">
+                Consumes AI credits
               </div>
             </div>
-          </form>
-
-          <div className="text-center text-[10px] font-bold text-slate-400">
-            Consumes AI credits
           </div>
-        </div>
+        )}
       </div>
     </div>
   );
