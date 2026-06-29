@@ -1,20 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import dynamic from "next/dynamic";
-
-// Dynamically import react-player to prevent Next.js errors
-const ReactPlayer = dynamic(() => import("react-player"), { ssr: false });
+import { Play, X } from "lucide-react";
 
 export default function WelcomeBanner() {
   const [isVideoOpen, setIsVideoOpen] = useState(false);
-  
-  const videoUrl = "https://youtu.be/uZuFXgNfZmI";
-  const thumbnailUrl = "https://img.youtube.com/vi/uZuFXgNfZmI/maxresdefault.jpg";
 
   return (
-    <div className="w-full mb-8">
-      {/* 1. THE BANNER (Matches the soft light peach color and sizing) */}
+    <div className="w-full mb-8 select-none">
+      {/* 1. THE BANNER */}
       <div className="bg-[#FFF9F6] rounded-3xl px-12 py-5 flex flex-row items-center justify-between border border-[#FFE2D1] shadow-[0_2px_12px_rgba(255,226,209,0.15)] w-full gap-8 h-[166px]">
         
         <div className="flex-1 text-left space-y-1.5 flex flex-col items-start justify-center h-full">
@@ -26,54 +20,65 @@ export default function WelcomeBanner() {
           </p>
         </div>
 
-        {/* The Video Box inside the banner (Thick Device Screen Border) */}
+        {/* The Video Mockup Card */}
         <div 
           onClick={() => setIsVideoOpen(true)}
-          className="relative w-[210px] h-[118px] bg-slate-900 rounded-xl cursor-pointer overflow-hidden group shadow-md shrink-0 border-[6px] border-[#FCD5B5]"
+          className="relative w-[210px] h-[118px] rounded-xl cursor-pointer overflow-hidden group shadow-md shrink-0 border-[6px] border-[#FCD5B5] bg-gradient-to-br from-indigo-950 via-[#1C0E4B] to-purple-950 flex flex-col justify-between p-2.5 transition-all duration-300 hover:scale-[1.02]"
         >
-          <img 
-            src={thumbnailUrl} 
-            alt="Video Thumbnail"
-            className="w-full h-full object-cover opacity-90 group-hover:opacity-75 transition duration-300"
-          />
-          {/* Play Button */}
-          <div className="absolute inset-0 flex items-center justify-center">
-            <div className="bg-[#5F25E6] hover:bg-[#4F12B3] text-white rounded-full p-2.5 shadow-lg group-hover:scale-105 transition transform duration-200 flex items-center justify-center">
-              <svg className="w-4 h-4 fill-white ml-0.5" viewBox="0 0 24 24">
-                <path d="M8 5v14l11-7z" />
-              </svg>
+          {/* Header UI */}
+          <div className="flex items-center gap-1.5 opacity-95">
+            <div className="h-4 w-4 rounded-full bg-pink-600 text-white font-extrabold text-[8px] flex items-center justify-center shadow">
+              F
+            </div>
+            <span className="text-[9px] font-bold text-white tracking-tight truncate w-32">
+              Fireflies Product Demo
+            </span>
+          </div>
+
+          {/* Central Play Button */}
+          <div className="absolute inset-0 flex items-center justify-center z-20">
+            <div className="bg-[#5F25E6] hover:bg-[#4F12B3] text-white rounded-full p-2 shadow-lg group-hover:scale-110 transition duration-200 flex items-center justify-center">
+              <Play size={14} className="fill-white text-white ml-0.5" />
+            </div>
+          </div>
+
+          {/* Footer UI (Progress Bar & Mini Avatar) */}
+          <div className="flex items-center justify-between w-full z-10 pt-1.5">
+            {/* Progress line */}
+            <div className="flex-1 h-1 bg-white/20 rounded-full overflow-hidden mr-2">
+              <div className="w-1/3 h-full bg-[#5F25E6] rounded-full"></div>
+            </div>
+            {/* Avatar thumbnail */}
+            <div className="h-4 w-4 rounded-full border border-white/20 bg-slate-800 overflow-hidden flex items-center justify-center">
+              <div className="h-3 w-3 rounded-full bg-slate-600"></div>
             </div>
           </div>
         </div>
       </div>
 
-      {/* 2. THE MODAL (Matches the dark overlay and large video size) */}
+      {/* 2. THE VIDEO OVERLAY MODAL */}
       {isVideoOpen && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/70 backdrop-blur-sm p-4">
-          
-          <div className="relative w-full max-w-[900px] flex flex-col items-end">
+          <div className="relative w-full max-w-[800px] bg-black rounded-2xl overflow-hidden shadow-[0_0_50px_rgba(0,0,0,0.8)] aspect-video">
             
-            {/* Close Button */}
+            {/* Close Button at top-right of container */}
             <button 
               onClick={() => setIsVideoOpen(false)}
-              className="text-white hover:text-gray-300 bg-white/10 hover:bg-white/20 rounded-full p-2 mb-3 transition backdrop-blur-md"
+              className="absolute top-4 right-4 text-white hover:text-gray-300 bg-black/40 hover:bg-black/60 rounded-full p-1.5 transition duration-200 z-50 border border-white/10"
               aria-label="Close video"
             >
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-              </svg>
+              <X size={18} />
             </button>
 
-            {/* The Enlarged Video Player */}
-            <div className="aspect-video w-full bg-black overflow-hidden rounded-xl shadow-[0_0_40px_rgba(0,0,0,0.6)]">
-              <ReactPlayer
-                src={videoUrl}
-                width="100%"
-                height="100%"
-                controls={true}
-                playing={false}
-              />
-            </div>
+            {/* YouTube IFrame Embed with Autoplay */}
+            <iframe
+              src="https://www.youtube.com/embed/uZuFXgNfZmI?autoplay=1"
+              title="Welcome Video"
+              frameBorder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowFullScreen
+              className="w-full h-full"
+            ></iframe>
           </div>
         </div>
       )}
