@@ -23,36 +23,13 @@ export default function WelcomeBanner() {
         {/* The Video Mockup Card */}
         <div 
           onClick={() => setIsVideoOpen(true)}
-          className="relative w-[210px] h-[118px] rounded-xl cursor-pointer overflow-hidden group shadow-md shrink-0 border-[6px] border-[#FCD5B5] bg-gradient-to-br from-indigo-950 via-[#1C0E4B] to-purple-950 flex flex-col justify-between p-2.5 transition-all duration-300 hover:scale-[1.02]"
+          className="relative w-[210px] h-[118px] cursor-pointer overflow-hidden group shrink-0 rounded-xl shadow-sm transition-all duration-300 hover:scale-[1.02]"
         >
-          {/* Header UI */}
-          <div className="flex items-center gap-1.5 opacity-95">
-            <div className="h-4 w-4 rounded-full bg-pink-600 text-white font-extrabold text-[8px] flex items-center justify-center shadow">
-              F
-            </div>
-            <span className="text-[9px] font-bold text-white tracking-tight truncate w-32">
-              Fireflies Product Demo
-            </span>
-          </div>
-
-          {/* Central Play Button */}
-          <div className="absolute inset-0 flex items-center justify-center z-20">
-            <div className="bg-[#5F25E6] hover:bg-[#4F12B3] text-white rounded-full p-2 shadow-lg group-hover:scale-110 transition duration-200 flex items-center justify-center">
-              <Play size={14} className="fill-white text-white ml-0.5" />
-            </div>
-          </div>
-
-          {/* Footer UI (Progress Bar & Mini Avatar) */}
-          <div className="flex items-center justify-between w-full z-10 pt-1.5">
-            {/* Progress line */}
-            <div className="flex-1 h-1 bg-white/20 rounded-full overflow-hidden mr-2">
-              <div className="w-1/3 h-full bg-[#5F25E6] rounded-full"></div>
-            </div>
-            {/* Avatar thumbnail */}
-            <div className="h-4 w-4 rounded-full border border-white/20 bg-slate-800 overflow-hidden flex items-center justify-center">
-              <div className="h-3 w-3 rounded-full bg-slate-600"></div>
-            </div>
-          </div>
+          <img 
+            src="/welcome-thumbnail.png"
+            alt="Fireflies Product Demo"
+            className="w-full h-full object-cover transition-opacity duration-300 group-hover:opacity-95"
+          />
         </div>
       </div>
 
