@@ -6,6 +6,7 @@ import { Check } from "lucide-react";
 
 export default function UpgradePage() {
   const [billingCycle, setBillingCycle] = useState<"monthly" | "annual">("annual");
+  const [currentPlan, setCurrentPlan] = useState("Free");
 
   const plans = [
     {
@@ -126,7 +127,7 @@ export default function UpgradePage() {
       {/* Title Header */}
       <div className="text-center space-y-2 mb-10">
         <h2 className="text-3xl font-extrabold tracking-tight text-slate-900">
-          You are on the <span className="text-violet-600">Free</span> plan
+          You are on the <span className="text-violet-600">{currentPlan}</span> plan
         </h2>
         <p className="text-sm font-semibold text-slate-400">
           You need to upgrade your plan to perform this action.
@@ -166,11 +167,16 @@ export default function UpgradePage() {
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-6 items-stretch pb-16">
         {plans.map((plan, i) => {
           const currentPrice = billingCycle === "monthly" ? plan.priceMonthly : plan.priceAnnual;
+          const isCurrent = plan.name === currentPlan;
+          const cardBorderClass = isCurrent
+            ? "border-violet-400 bg-violet-50/5 shadow-sm cursor-default"
+            : "border-slate-200 hover:border-violet-500 hover:ring-2 hover:ring-violet-100/50 hover:shadow-md cursor-pointer";
+
           return (
             <div
               key={i}
-              className={`rounded-3xl border border-slate-200 bg-white p-6 shadow-sm hover:shadow-md transition-all flex flex-col justify-between items-stretch relative ${
-                plan.badge ? "ring-2 ring-violet-500 border-transparent animate-pulse-subtle" : ""
+              className={`rounded-3xl bg-white p-6 transition-all flex flex-col justify-between items-stretch relative border ${cardBorderClass} ${
+                plan.badge && !isCurrent ? "ring-2 ring-violet-500/30 border-transparent animate-pulse-subtle" : ""
               }`}
             >
               {/* Badge Popular */}
@@ -260,16 +266,19 @@ export default function UpgradePage() {
                     </button>
                   </div>
                 )}
-                {plan.isCurrent ? (
-                  <div className="w-full bg-slate-50 border border-slate-200 text-slate-400 py-3 rounded-xl text-xs font-bold text-center cursor-default">
-                    {plan.buttonText}
+                {isCurrent ? (
+                  <div className="w-full bg-slate-50 border border-slate-250 text-slate-400 py-3 rounded-xl text-xs font-bold text-center cursor-default select-none">
+                    Current
                   </div>
                 ) : (
                   <button
-                    onClick={() => alert(`Upgrading to ${plan.name} Plan!`)}
+                    onClick={() => {
+                      setCurrentPlan(plan.name);
+                      alert(`Successfully subscribed to the ${plan.name} plan!`);
+                    }}
                     className="w-full bg-violet-600 hover:bg-violet-700 text-white py-3 rounded-xl text-xs font-bold text-center transition-all shadow-md shadow-violet-100 hover:shadow-lg cursor-pointer"
                   >
-                    {plan.buttonText}
+                    {plan.name === "Free" ? "Downgrade" : "Upgrade"}
                   </button>
                 )}
               </div>
