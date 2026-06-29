@@ -595,20 +595,30 @@ export default function HomePage() {
             
             {/* Badges */}
             <div className="flex gap-3">
-              <button className="flex h-9 w-9 items-center justify-center rounded-md bg-white p-2 shadow-sm border border-slate-100/50 hover:bg-slate-50 transition-all cursor-pointer">
+              <a 
+                href="https://apps.apple.com/us/app/fireflies-ai-notetaker/id6463164203"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex h-9 w-9 items-center justify-center rounded-md bg-white p-2 shadow-sm border border-slate-100/50 transition-all duration-200 hover:scale-110 hover:bg-violet-50/50 hover:border-violet-300/80 hover:shadow-md cursor-pointer"
+              >
                 <img
                   src="/app_store_logo.png"
                   alt="App Store"
                   className="h-5 w-5 object-contain"
                 />
-              </button>
-              <button className="flex h-9 w-9 items-center justify-center rounded-md bg-white p-2 shadow-sm border border-slate-100/50 hover:bg-slate-50 transition-all cursor-pointer">
+              </a>
+              <a 
+                href="https://play.google.com/store/apps/details?id=ai.fireflies.mobile&pcampaignid=web_share"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex h-9 w-9 items-center justify-center rounded-md bg-white p-2 shadow-sm border border-slate-100/50 transition-all duration-200 hover:scale-110 hover:bg-violet-50/50 hover:border-violet-300/80 hover:shadow-md cursor-pointer"
+              >
                 <img
                   src="/play_store_logo.png"
                   alt="Google Play"
                   className="h-5 w-5 object-contain"
                 />
-              </button>
+              </a>
             </div>
           </div>
         </div>
