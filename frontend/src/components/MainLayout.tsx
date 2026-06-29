@@ -48,20 +48,6 @@ import {
 
 import MoreMenuTrigger from "./MoreMenuTrigger";
 
-const IntegrationsIcon = (props: any) => (
-  <svg
-    {...props}
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    <path d="m12 3-10 5 10 5 10-5-10-5Z" />
-    <path d="m2 12 10 5 10-5" />
-  </svg>
-);
 
 const ChromeIcon = (props: any) => (
   <svg
@@ -179,7 +165,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
     { name: "Meetings", href: "/meetings", icon: Video },
     { name: "Meeting Status", href: "/status", icon: Activity },
     { name: "Uploads", href: "/upload", icon: Upload },
-    { name: "Integrations", href: "/integrations", icon: IntegrationsIcon },
+    { name: "Integrations", href: "/integrations", icon: Layers },
     { name: "Analytics", href: "/analytics", icon: BarChart2 },
     { name: "Voice Agents", href: "/agents", icon: Bot, badge: "NEW" },
     { name: "AI Skills", href: "/skills", icon: Sparkles },
