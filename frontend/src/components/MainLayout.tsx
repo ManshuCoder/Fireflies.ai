@@ -58,8 +58,8 @@ const IntegrationsIcon = (props: any) => (
     strokeLinecap="round"
     strokeLinejoin="round"
   >
-    <path d="m12 4-10 5 10 5 10-5-10-5Z" />
-    <path d="m2 14 10 5 10-5" />
+    <path d="m12 3-10 5 10 5 10-5-10-5Z" />
+    <path d="m2 12 10 5 10-5" />
   </svg>
 );
 
