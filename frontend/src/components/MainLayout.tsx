@@ -273,8 +273,9 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
                       {!isCollapsed && <span>{item.name}</span>}
                     </div>
                     {!isCollapsed && item.badge && (
-                      <span className="rounded-full bg-emerald-100 px-2 py-0.5 text-[10px] font-bold text-emerald-700">
-                        {item.badge}
+                      <span className="relative overflow-hidden rounded-[6px] bg-gradient-to-r from-[#10b981] to-[#059669] px-2 py-0.5 text-[9px] font-extrabold tracking-wide text-white shadow-[0_1px_3px_rgba(16,185,129,0.15)] flex items-center justify-center min-w-[34px] h-[18px]">
+                        <span className="relative z-10">{item.badge}</span>
+                        <div className="absolute inset-0 animate-sweep pointer-events-none"></div>
                       </span>
                     )}
                   </Link>
